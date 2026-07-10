@@ -87,7 +87,7 @@ router.post(
 
 router.put(
   "/languages/:id/:userId/stateAccept",
-  hasPermissions(["Approve languages"]),
+  hasPermissions(["languages::approve"]),
   _LanguageManagement.updateLanguageStateAccept,
 );
 
