@@ -5,6 +5,7 @@ import { ResponseModel } from "../Domain/Core/Entities/ResponseModel";
 import { LanguageFilter } from "../Domain/Language/Entities/LanguageFilter";
 import { SemanticsFilter } from "../Domain/Language/Entities/SemanticFilter";
 import { LanguageUseCase } from "../Domain/Language/LanguageUseCase";
+import { isAuthenticated } from "@variamosple/variamos-security";
 
 export const LANGUAGES_V2_ROUTE = "/v2/languages";
 
@@ -48,7 +49,7 @@ async function queryLanguagesRepository(
   }
 }
 
-languagesV2Router.get("/", async (req, res) => {
+languagesV2Router.get("/", isAuthenticated, async (req, res) => {
   const transactionId = "getLanguages";
   const { pageNumber, pageSize, name = null } = req.query;
 
@@ -64,21 +65,88 @@ languagesV2Router.get("/", async (req, res) => {
   );
 });
 
-languagesV2Router.get("/public", async (req, res) => {
+languagesV2Router.get("/public", isAuthenticated, async (req, res) => {
   const transactionId = "getPublicLanguages";
+  const userId = req.user?.id;
   const { pageNumber, pageSize, name = null } = req.query;
-  const stateAccept = "ACTIVE";
-  // Public/Approved language are named "active" in the DB
-  queryLanguagesRepository(
-    transactionId,
-    name as string,
-    null,
-    stateAccept,
-    pageNumber as unknown as number,
-    pageSize as unknown as number,
-    false,
-    res,
-  );
+  try {
+    const filter: LanguageFilter = LanguageFilter.builder()
+      .setName(name as string)
+      .setPageNumber(pageNumber as unknown as number)
+      .setPageSize(pageSize as unknown as number)
+      .setUserId(userId as string)
+      .build();
+
+    const request = new RequestModel<LanguageFilter>(transactionId, filter);
+    const response = await new LanguageUseCase().getPublicLanguages(request);
+
+    const status = response.errorCode || 200;
+    res.status(status).json(response);
+  } catch (error) {
+    console.error("Error:", error);
+    const response = new ResponseModel(
+      transactionId,
+      500,
+      "Internal Server Error",
+    );
+    res.status(500).json(response);
+  }
+});
+
+languagesV2Router.get("/deleted", isAuthenticated, async (req, res) => {
+  const transactionId = "getDeletedLanguages";
+  const userId = req.user?.id;
+  const { pageNumber, pageSize, name = null } = req.query;
+  try {
+    const filter: LanguageFilter = LanguageFilter.builder()
+      .setName(name as string)
+      .setPageNumber(pageNumber as unknown as number)
+      .setPageSize(pageSize as unknown as number)
+      .setUserId(userId as string)
+      .build();
+
+    const request = new RequestModel<LanguageFilter>(transactionId, filter);
+    const response = await new LanguageUseCase().getDeletedLanguages(request);
+
+    const status = response.errorCode || 200;
+    res.status(status).json(response);
+  } catch (error) {
+    console.error("Error:", error);
+    const response = new ResponseModel(
+      transactionId,
+      500,
+      "Internal Server Error",
+    );
+    res.status(500).json(response);
+  }
+});
+
+languagesV2Router.get("/pending", isAuthenticated, async (req, res) => {
+  const transactionId = "getPendingLanguages";
+  const userId = req.user?.id;
+  const { pageNumber, pageSize, name = null } = req.query;
+  try {
+    const filter: LanguageFilter = LanguageFilter.builder()
+      .setName(name as string)
+      .setPageNumber(pageNumber as unknown as number)
+      .setPageSize(pageSize as unknown as number)
+      .setUserId(userId as string)
+      .build();
+
+    const request = new RequestModel<LanguageFilter>(transactionId, filter);
+    const response = await new LanguageUseCase().getPendingLanguages(request);
+
+    const status = response.errorCode || 200;
+    res.status(status).json(response);
+  } catch (error) {
+    console.error("Error:", error);
+    const response = new ResponseModel(
+      transactionId,
+      500,
+      "Internal Server Error",
+    );
+    res.status(500).json(response);
+  }
 });
 
 languagesV2Router.get("/elements/draws", async (req, res) => {

@@ -17,6 +17,23 @@ export class LanguageUseCase {
     return LanguageRepositoryInstance.getLanguages(request, withDelete);
   }
 
+  getPublicLanguages(
+    request: RequestModel<PagedModel>,
+  ): Promise<ResponseModel<Language[]>> {
+    return LanguageRepositoryInstance.getPublicLanguages(request);
+  }
+
+  getDeletedLanguages(
+    request: RequestModel<PagedModel>,
+  ): Promise<ResponseModel<Language[]>> {
+    return LanguageRepositoryInstance.getDeletedLanguages(request);
+  }
+  
+  getPendingLanguages(
+    request: RequestModel<PagedModel>,
+  ): Promise<ResponseModel<Language[]>> {
+    return LanguageRepositoryInstance.getPendingLanguages(request);
+  }
   getLanguageSemantics(
     request: RequestModel<SemanticsFilter>,
   ): Promise<ResponseModel<LanguageSemantic[]>> {

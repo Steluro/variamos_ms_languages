@@ -1,14 +1,9 @@
-import { QueryTypes } from "sequelize";
 import { RequestModel } from "../../../Domain/Core/Entities/RequestModel";
 import { ResponseModel } from "../../../Domain/Core/Entities/ResponseModel";
 import { UsersFilter } from "../../../Domain/Session/Entities/UsersFilter";
-import { User } from "../../../Domain/Session/Entities/User";
-import sequelizeVariamos from "../../dataBase/VariamosORM";
+import { User, OrmUser } from "../../../Domain/Session/Entities/User";
+import { OrmUserLanguage } from "../../../Domain/Language/Entities/UserLanguage";
 import { BaseRepository } from "../BaseRepository";
-import {
-  OrmUserLanguage,
-  UserLanguage,
-} from "../../../Domain/Language/Entities/UserLanguage";
 
 export class UsersRepository extends BaseRepository {
   async getUsersNotShared(
@@ -17,54 +12,54 @@ export class UsersRepository extends BaseRepository {
     const response = new ResponseModel<User[]>(request.transactionId);
     try {
       const { data: filter = new UsersFilter() } = request;
-      const replacements = this.initilizeReplacements(filter);
-      console.log(replacements);
+      const { Op } = require("sequelize");
 
-      response.totalCount = await sequelizeVariamos
-        .query(
-          `
-            SELECT COUNT(DISTINCT u.id)
-            FROM variamos.user AS u
-            WHERE u.id NOT IN (
-              SELECT ul.user_id
-              FROM variamos.user_language AS ul
-              WHERE ul.language_id = :languageId AND ul.access_level <> 'SHARED'
-            )
-            AND (:name IS NULL OR u.name ILIKE '%' || :name || '%')
-            AND (:email IS NULL OR u.email ILIKE '%' || :email || '%');
-              `,
-          { type: QueryTypes.SELECT, replacements },
-        )
-        .then((result: any) => +result?.[0]?.count || 0);
+      const whereClause : any = {};
+      if (filter.name) {
+        whereClause.name = { [Op.iLike]: `%${filter.name}%` };
+      }
+      if (filter.email) {
+        whereClause.email = { [Op.iLike]: `%${filter.email}%` };
+      }
 
-      response.data = await sequelizeVariamos
-        .query(
-          `
-            SELECT u.id, u.user, u.name, u.email
-            FROM variamos.user AS u
-            WHERE u.id NOT IN (
-              SELECT ul.user_id
-              FROM variamos.user_language AS ul
-              WHERE ul.language_id = :languageId
-            )
-            AND (:name IS NULL OR u.name ILIKE '%' || :name || '%')
-            AND (:email IS NULL OR u.email ILIKE '%' || :email || '%')
-            ORDER BY u.name
-            LIMIT :pageSize OFFSET (:pageNumber - 1) * :pageSize;
-              `,
-          {
-            type: QueryTypes.SELECT,
-            replacements,
-          },
-        )
-        .then((result: any[]) =>
-          result.map<User>((row) => ({
-            id: row.id,
-            user: row.user,
-            name: row.name,
-            email: row.email,
-          })),
-        );
+      // Get user IDs that already have access to this language
+      const sharedUserIds = filter.languageId
+        ? (
+            await OrmUserLanguage.findAll({
+              attributes: ["user_id"],
+              where: {
+                language_id: filter.languageId,
+              },
+              raw: true,
+            })
+          ).map((ul) => ul.user_id)
+        : [];
+
+      // Add NOT IN condition if there are shared users
+      if (sharedUserIds.length > 0) {
+        whereClause.id = { [Op.notIn]: sharedUserIds };
+      }
+
+      response.totalCount = await OrmUser.count({
+        where: whereClause,
+      });
+
+      const results = await OrmUser.findAll({
+        where: whereClause,
+        order: [["name", "ASC"]],
+        limit: filter.pageSize || undefined,
+        offset:
+          filter.pageNumber && filter.pageSize
+            ? (filter.pageNumber - 1) * filter.pageSize
+            : undefined,
+      });
+
+      response.data = results.map((row: any) => ({
+        id: row.id,
+        user: row.user,
+        name: row.name,
+        email: row.email,
+      }));
     } catch (error) {
       console.error("Error in getUsersNotShared:", request, error);
       response.withError(500, "Internal server error");
@@ -75,25 +70,20 @@ export class UsersRepository extends BaseRepository {
 
   async getAccessLevel(userId: string, languageId: number) {
     try {
-      const response = await OrmUserLanguage.findAll({
+      const response = await OrmUserLanguage.findOne({
         where: {
           user_id: userId,
           language_id: languageId,
         },
-      }).then((result: any[]) =>
-        result.map<UserLanguage>((row) => ({
-          user_id: row.user_id,
-          language_id: row.language_id,
-          access_level: row.access_level,
-        })),
-      );
-      if (response.length == 0) {
+      });
+      if (!response) {
         return null;
       } else {
-        return response[0].access_level;
+        return response.access_level;
       }
     } catch (error) {
       console.error("Error in getAccessLevel:", error);
+      return null;
     }
   }
 }

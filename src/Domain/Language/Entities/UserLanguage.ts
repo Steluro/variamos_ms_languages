@@ -1,30 +1,82 @@
 // import Sequelize, { JSON, JSONB } from "sequelize";
 // import variamos_db from "../../../DataProviders/dataBase/variamos";
 
-import Sequelize from "sequelize";
+import Sequelize, { Model } from "sequelize";
 import sequelize from "../../../DataProviders/dataBase/VariamosORM";
+import { OrmUser } from "../../Session/Entities/User";
+import { OrmLanguage } from "./Language";
 
-export const OrmUserLanguage = sequelize.define(
-  "user_language",
+export interface UserLanguageAttributes{
+  user_id?: string;
+  language_id?: number;
+  access_level?: string;
+}
+
+export class OrmUserLanguage extends Model<UserLanguageAttributes> implements UserLanguageAttributes{
+  user_id?: string;
+  language_id?: number;
+  access_level?: string;
+}
+OrmUserLanguage.init(
   {
     user_id: {
       type: Sequelize.TEXT, 
-      primaryKey: true, 
+      primaryKey: true,
+      references:{
+        model : OrmUser,
+        key: "id"
+      } 
     },
     language_id: {
       type: Sequelize.INTEGER, 
-      primaryKey: true
+      primaryKey: true,
+      references:{
+        model : OrmLanguage,
+        key: "id"
+      }
     },
     access_level: {
       type: Sequelize.CHAR(10)
     } 
   },
   {
+    tableName :"user_language",
+    sequelize,
     freezeTableName: true,
     schema: "variamos",
     timestamps: false,
   }
 );
+
+OrmUserLanguage.belongsTo(OrmUser, {
+  foreignKey: "user_id",
+  as: "user",
+});
+
+OrmUser.hasMany(OrmUserLanguage, {
+  foreignKey: "user_id",
+  as: "userLanguages",
+});
+
+OrmUserLanguage.belongsTo(OrmLanguage, {
+  foreignKey: "language_id",
+  as: "language",
+});
+
+OrmLanguage.hasMany(OrmUserLanguage, {
+  foreignKey: "language_id",
+  as: "userLanguages",
+});
+
+OrmLanguage.hasMany(OrmUserLanguage, {
+  foreignKey: "language_id",
+  as: "owner",
+});
+
+OrmLanguage.hasMany(OrmUserLanguage, {
+  foreignKey: "language_id",
+  as: "userPermission",
+});
 
 export class UserLanguage {
   user_id?: string;
