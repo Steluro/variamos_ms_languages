@@ -13,17 +13,28 @@ const Language = sequelize.define("Language", {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    type: {
-        type: DataTypes.ENUM("scope", "domain", "application"),
-        allowNull: false,
-    },
     ownerId: {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    type: {
+        type: DataTypes.ENUM("scope", "domain", "application"),
+        allowNull: false,
+    },
+    isPending: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+    },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+    },
 }, {
     schema: env.database.schema,
-    tableName: "language",
+    tableName: "Languages",
+    timestamps: true,
 });
 
 Language.belongsTo(UserReference, {

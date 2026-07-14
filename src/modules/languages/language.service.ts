@@ -1,12 +1,9 @@
-// language.service.ts
-
 import * as languageRepository from "./language.repository";
+import { LanguageFilters } from "./languages.filters";
 
-type LanguageType = "scope" | "domain" | "application";
 
-
-export async function getLanguages() {
-    return languageRepository.findAll();
+export async function getLanguages(filters: LanguageFilters) {
+    return languageRepository.findAll(filters);
 }
 
 
@@ -18,9 +15,4 @@ export async function getLanguageById(uuid: string) {
     }
 
     return language;
-}
-
-
-export async function getLanguagesByType(type: LanguageType) {
-    return languageRepository.findByType(type);
 }

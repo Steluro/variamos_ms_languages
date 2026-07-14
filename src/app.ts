@@ -14,7 +14,7 @@ app.use(
         err: any,
         _req: express.Request,
         res: express.Response,
-        next: express.NextFunction
+        _next: express.NextFunction
     ) => {
         console.error("ERROR:", err);
         console.error("MESSAGE:", err.message);

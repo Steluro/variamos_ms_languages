@@ -1,17 +1,18 @@
 import UserReference from "../userReferences/userReference.model";
 import Language from "./language.model";
+import { LanguageFilters } from "./languages.filters";
 
 
-export async function findAll() {
+export async function findAll(filters: LanguageFilters) {
+
     return Language.findAll({
+        where: filters.where,
         include: [
             {
                 model: UserReference,
                 as: "owner",
-                attributes: [
-                    "id",
-                    "name",
-                ],
+                attributes: ["id", "name"],
+                where: filters.ownerWhere,
             },
         ],
     });
@@ -27,22 +28,8 @@ export async function findById(uuid: string) {
             {
                 model: UserReference,
                 as: "owner",
-                attributes: [
-                    "id",
-                    "name",
-                ],
+                attributes: ["id", "name"],
             },
         ],
-    });
-}
-
-
-export async function findByType(
-    type: "scope" | "domain" | "application"
-) {
-    return Language.findAll({
-        where: {
-            type,
-        },
     });
 }
