@@ -15,6 +15,8 @@ export async function findAll(filters: LanguageFilters) {
                 where: filters.ownerWhere,
             },
         ],
+        limit: filters.limit,
+        offset: filters.offset,
     });
 }
 

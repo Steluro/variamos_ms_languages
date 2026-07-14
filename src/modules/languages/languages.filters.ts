@@ -3,6 +3,8 @@ import { Op, WhereOptions } from "sequelize";
 export interface LanguageFilters {
     where: WhereOptions;
     ownerWhere: WhereOptions;
+    limit?: number;
+    offset?: number;
 }
 
 export function buildLanguageFilters(
@@ -22,6 +24,8 @@ export function buildLanguageFilters(
         createdAfter,
         updatedBefore,
         updatedAfter,
+        limit,
+        offset,
     } = query;
 
     if (typeof name === "string") {
@@ -79,5 +83,7 @@ export function buildLanguageFilters(
     return {
         where,
         ownerWhere,
+        limit: typeof limit === "string" ? Number.parseInt(limit) : undefined,
+        offset: typeof offset === "string" ? Number.parseInt(offset) : undefined,
     };
 }
