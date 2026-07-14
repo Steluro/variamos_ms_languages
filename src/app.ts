@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import languageRouter from "./modules/languages/language.route";
 
@@ -5,6 +6,10 @@ const app = express();
 
 app.disable("x-powered-by");
 
+app.use(cors({
+    origin: true,
+    credentials: true,
+}));
 app.use(express.json());
 
 app.use("", languageRouter);
