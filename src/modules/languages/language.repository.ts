@@ -1,6 +1,7 @@
 import UserReference from "../userReferences/userReference.model";
 import { LanguageFilters } from "./language.filters";
 import Language from "./language.model";
+import LanguageCollaborator from "./languageCollaborator.model";
 
 export async function findAll(filters: LanguageFilters) {
 
@@ -12,6 +13,18 @@ export async function findAll(filters: LanguageFilters) {
                 as: "owner",
                 attributes: ["id", "name"],
                 where: filters.ownerWhere,
+            },
+            {
+                model: LanguageCollaborator,
+                as: "collaborators",
+                attributes: ["role"],
+                include: [
+                    {
+                        model: UserReference,
+                        as: "user",
+                        attributes: ["id", "name"],
+                    },
+                ],
             },
         ],
         limit: filters.limit,
@@ -31,12 +44,16 @@ export async function findById(uuid: string) {
                 attributes: ["id", "name"],
             },
             {
-                model: UserReference,
+                model: LanguageCollaborator,
                 as: "collaborators",
-                attributes: ["id", "name"],
-                through: {
-                    attributes: ["role"],
-                },
+                attributes: ["userId", "role"],
+                include: [
+                    {
+                        model: UserReference,
+                        as: "user",
+                        attributes: ["id", "name"],
+                    },
+                ],
             },
         ],
     });

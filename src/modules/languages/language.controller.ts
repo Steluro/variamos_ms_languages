@@ -18,6 +18,24 @@ export async function getLanguages(
     }
 }
 
+export async function getLanguage(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
+    try {
+        const language = await languageService.getLanguage(req.params.uuid as string);
+
+        if (!language) {
+            return res.status(404).json({ message: "Language not found" });
+        }
+
+        return res.json(language);
+    } catch (error) {
+        next(error);
+    }
+}
+
 export async function createLanguage(
     req: Request,
     res: Response,
@@ -43,6 +61,10 @@ export async function updateLanguage(
             req.body,
         );
 
+        if (!language) {
+            return res.status(404).json({ message: "Language not found" });
+        }
+
         return res.json(language);
     } catch (error) {
         next(error);
@@ -58,6 +80,10 @@ export async function deleteLanguage(
         const language = await languageService.deleteLanguage(
             req.params.uuid as string,
         );
+
+        if (!language) {
+            return res.status(404).json({ message: "Language not found" });
+        }
 
         return res.json(language);
     } catch (error) {

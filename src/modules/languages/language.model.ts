@@ -1,7 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/database";
 import { env } from "../../config/env";
-import UserReference from "../userReferences/userReference.model";
 
 const Language = sequelize.define("Language", {
     uuid: {
@@ -30,24 +29,6 @@ const Language = sequelize.define("Language", {
     schema: env.database.schema,
     tableName: "Languages",
     timestamps: true,
-});
-
-Language.hasMany(Language, {
-    foreignKey: "publicVersionId",
-    sourceKey: "uuid",
-    as: "drafts"
-});
-
-Language.belongsTo(Language, {
-    foreignKey: "publicVersionId",
-    targetKey: "uuid",
-    as: "publicVersion",
-});
-
-Language.belongsTo(UserReference, {
-    foreignKey: "ownerId",
-    targetKey: "id",
-    as: "owner",
 });
 
 export default Language;

@@ -15,12 +15,8 @@ export async function getLanguages(filters: LanguageFilters) {
  * @param uuid The UUID of the language to get
  * @returns The language
  */
-export async function getLanguageById(uuid: string) {
-    const language = await languageRepository.findById(uuid);
-    if (!language) {
-        throw new Error("Language not found");
-    }
-    return language;
+export async function getLanguage(uuid: string) {
+    return languageRepository.findById(uuid);
 }
 
 /**
@@ -39,11 +35,7 @@ export async function createLanguage(data: any) {
  * @returns The updated language
  */
 export async function updateLanguage(uuid: string, data: any) {
-    const language = await languageRepository.update(uuid, data);
-    if (!language) {
-        throw new Error("Language not found");
-    }
-    return language;
+    return languageRepository.update(uuid, data);
 }
 
 /**
@@ -52,9 +44,5 @@ export async function updateLanguage(uuid: string, data: any) {
  * @returns The deleted language
  */
 export async function deleteLanguage(uuid: string) {
-    const language = await languageRepository.remove(uuid);
-    if (!language) {
-        throw new Error("Language not found");
-    }
-    return language;
+    return languageRepository.remove(uuid);
 }

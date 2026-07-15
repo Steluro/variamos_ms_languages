@@ -1,3 +1,5 @@
+import "./modules/associations";
+
 import app from "./app";
 import { sequelize } from "./config/database";
 import { env } from "./config/env";
