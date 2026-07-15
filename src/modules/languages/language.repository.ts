@@ -30,6 +30,14 @@ export async function findById(uuid: string) {
                 as: "owner",
                 attributes: ["id", "name"],
             },
+            {
+                model: UserReference,
+                as: "collaborators",
+                attributes: ["id", "name"],
+                through: {
+                    attributes: ["role"],
+                },
+            },
         ],
     });
 }
