@@ -2,7 +2,6 @@ import UserReference from "../userReferences/userReference.model";
 import { LanguageFilters } from "./language.filters";
 import Language from "./language.model";
 
-
 export async function findAll(filters: LanguageFilters) {
 
     return Language.findAll({
@@ -20,7 +19,6 @@ export async function findAll(filters: LanguageFilters) {
     });
 }
 
-
 export async function findById(uuid: string) {
     return Language.findOne({
         where: {
@@ -34,4 +32,30 @@ export async function findById(uuid: string) {
             },
         ],
     });
+}
+
+export async function create(data: {
+    name: string;
+    type: "scope" | "domain" | "application";
+    publicVersionId?: string;
+}) {
+    return await Language.create({
+        ...data,
+        status: "draft",
+        // TODO: Get from auth context
+        ownerId: "00000000-0000-0000-0000-000000000000",
+    });
+}
+
+export async function update(uuid: string, data: Partial<{
+    name: string;
+    type: "scope" | "domain" | "application";
+    publicVersionId?: string;
+    status?: "draft" | "pending" | "published" | "deleted";
+}>) {
+    return await Language.update(data, { where: { uuid } });
+}
+
+export async function remove(uuid: string) {
+    return await Language.destroy({ where: { uuid } });
 }
