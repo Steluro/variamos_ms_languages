@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
+import { buildLanguageFilters } from "./language.filters";
 import * as languageService from "./language.service";
-import { buildLanguageFilters } from "./languages.filters";
 
 export async function getLanguages(
     req: Request,

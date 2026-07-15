@@ -1,6 +1,6 @@
 import UserReference from "../userReferences/userReference.model";
+import { LanguageFilters } from "./language.filters";
 import Language from "./language.model";
-import { LanguageFilters } from "./languages.filters";
 
 
 export async function findAll(filters: LanguageFilters) {

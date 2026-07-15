@@ -14,12 +14,11 @@ export function buildLanguageFilters(
     const ownerWhere: WhereOptions = {};
 
     const {
-        name,
+        name, // ISLIKE
         ownerId,
-        ownerName,
+        ownerName, // ISLIKE
         type,
-        isPending,
-        isDeleted,
+        status,
         createdBefore,
         createdAfter,
         updatedBefore,
@@ -42,12 +41,8 @@ export function buildLanguageFilters(
         where.type = type;
     }
 
-    if (typeof isPending === "string") {
-        where.isPending = isPending === "true";
-    }
-
-    if (typeof isDeleted === "string") {
-        where.isDeleted = isDeleted === "true";
+    if (typeof status === "string") {
+        where.status = status;
     }
 
     if (typeof ownerName === "string") {

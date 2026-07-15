@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import { sequelize } from '../../config/database';
 
 /**
- * TODO: Replace this model with an actual user reference with event sourcing
+ * HACK: Replace this model with an actual user reference with event sourcing
  */
 const UserReference = sequelize.define(
     'UserReference',

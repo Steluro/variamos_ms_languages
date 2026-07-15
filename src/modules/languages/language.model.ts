@@ -11,25 +11,20 @@ const Language = sequelize.define("Language", {
     },
     name: {
         type: DataTypes.STRING,
-        allowNull: false,
     },
     ownerId: {
         type: DataTypes.STRING,
-        allowNull: false,
     },
     type: {
         type: DataTypes.ENUM("scope", "domain", "application"),
-        allowNull: false,
     },
-    isPending: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-        allowNull: false,
+    status: {
+        type: DataTypes.ENUM("draft", "pending", "published", "deleted"),
+        defaultValue: "draft",
     },
-    isDeleted: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-        allowNull: false,
+    publicVersionId: {
+        type: DataTypes.UUID,
+        allowNull: true,
     },
 }, {
     schema: env.database.schema,
@@ -37,10 +32,22 @@ const Language = sequelize.define("Language", {
     timestamps: true,
 });
 
+Language.hasMany(Language, {
+    foreignKey: "publicVersionId",
+    sourceKey: "uuid",
+    as: "drafts"
+});
+
+Language.belongsTo(Language, {
+    foreignKey: "publicVersionId",
+    targetKey: "uuid",
+    as: "publicVersion",
+});
+
 Language.belongsTo(UserReference, {
     foreignKey: "ownerId",
     targetKey: "id",
-    as: "owner"
+    as: "owner",
 });
 
 export default Language;
