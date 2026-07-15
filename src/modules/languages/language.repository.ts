@@ -46,7 +46,7 @@ export async function findById(uuid: string) {
             {
                 model: LanguageCollaborator,
                 as: "collaborators",
-                attributes: ["userId", "role"],
+                attributes: ["role"],
                 include: [
                     {
                         model: UserReference,
