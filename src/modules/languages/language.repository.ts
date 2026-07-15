@@ -56,6 +56,11 @@ export async function update(uuid: string, data: Partial<{
     return await Language.update(data, { where: { uuid } });
 }
 
+/**
+ * Soft delete a language by setting its status to "deleted"
+ * @param uuid The UUID of the language to delete
+ * @returns The number of affected rows
+ */
 export async function remove(uuid: string) {
-    return await Language.destroy({ where: { uuid } });
+    return await Language.update({ status: "deleted" }, { where: { uuid } });
 }
