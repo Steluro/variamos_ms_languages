@@ -3,7 +3,7 @@ import { LanguageAttributes } from "./language.model";
 
 export interface LanguageFilter {
     uuid?: string | string[];
-    name?: string;
+    name?: string | string[];
     type?: string | string[];
     status?: string | string[];
     createdAtFrom?: Date | string;
@@ -11,7 +11,7 @@ export interface LanguageFilter {
     updatedAtFrom?: Date | string;
     updatedAtTo?: Date | string;
     ownerId?: string | string[];
-    ownerName?: string;
+    ownerName?: string | string[];
 }
 
 const builders: ((f: LanguageFilter) => Partial<WhereOptions> | undefined)[] = [
@@ -20,7 +20,11 @@ const builders: ((f: LanguageFilter) => Partial<WhereOptions> | undefined)[] = [
     } : undefined,
 
     (f) => f.name ? {
-        name: { [Op.like]: `%${f.name}%` },
+        [Op.or]: (Array.isArray(f.name) ? f.name : [f.name]).map((name) => ({
+            name: {
+                [Op.like]: `%${name.trim()}%`,
+            },
+        })),
     } : undefined,
 
     (f) => f.type ? {
@@ -50,7 +54,9 @@ const builders: ((f: LanguageFilter) => Partial<WhereOptions> | undefined)[] = [
     } : undefined,
 
     (f) => f.ownerName ? {
-        '$owner.name$': { [Op.like]: `%${f.ownerName}%` },
+        [Op.or]: (Array.isArray(f.ownerName) ? f.ownerName : f.ownerName.split(",")).map((name) => ({
+            '$owner.name$': { [Op.iLike]: `%${name.trim()}%` },
+        }))
     } : undefined,
 ];
 
