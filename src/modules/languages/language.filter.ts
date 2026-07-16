@@ -6,10 +6,10 @@ export interface LanguageFilter {
     name?: string | string[];
     type?: string | string[];
     status?: string | string[];
-    createdAtFrom?: Date | string;
-    createdAtTo?: Date | string;
-    updatedAtFrom?: Date | string;
-    updatedAtTo?: Date | string;
+    createdBefore?: Date | string;
+    createdAfter?: Date | string;
+    updatedBefore?: Date | string;
+    updatedAfter?: Date | string;
     ownerId?: string | string[];
     ownerName?: string | string[];
     collaboratorId?: string | string[];
@@ -38,17 +38,17 @@ const builders: ((f: LanguageFilter) => Partial<WhereOptions> | undefined)[] = [
         status: { [Op.in]: Array.isArray(f.status) ? f.status : f.status.split(",").map((status) => status.trim()) },
     } : undefined,
 
-    (f) => f.createdAtFrom || f.createdAtTo ? {
+    (f) => f.createdBefore || f.createdAfter ? {
         createdAt: {
-            ...(f.createdAtFrom && { [Op.gte]: f.createdAtFrom }),
-            ...(f.createdAtTo && { [Op.lte]: f.createdAtTo }),
+            ...(f.createdBefore && { [Op.gte]: f.createdBefore }),
+            ...(f.createdAfter && { [Op.lte]: f.createdAfter }),
         },
     } : undefined,
 
-    (f) => f.updatedAtFrom || f.updatedAtTo ? {
+    (f) => f.updatedBefore || f.updatedAfter ? {
         updatedAt: {
-            ...(f.updatedAtFrom && { [Op.gte]: f.updatedAtFrom }),
-            ...(f.updatedAtTo && { [Op.lte]: f.updatedAtTo }),
+            ...(f.updatedBefore && { [Op.gte]: f.updatedBefore }),
+            ...(f.updatedAfter && { [Op.lte]: f.updatedAfter }),
         },
     } : undefined,
 
