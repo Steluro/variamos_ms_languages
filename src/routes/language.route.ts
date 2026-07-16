@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as languageController from "./language.controller";
+import * as languageController from "../controllers/language.controller";
 
 const languageRouter = Router();
 

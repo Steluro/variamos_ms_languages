@@ -1,5 +1,5 @@
 import { Op, WhereOptions } from "sequelize";
-import { LanguageAttributes } from "./language.model";
+import { LanguageAttributes } from "../models/language.model";
 
 export interface LanguageFilter {
     uuid?: string | string[];

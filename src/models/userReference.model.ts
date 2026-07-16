@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../../config/database';
+import { sequelize } from '../config/database';
 
 /**
  * HACK: Replace this model with an actual user reference with event sourcing

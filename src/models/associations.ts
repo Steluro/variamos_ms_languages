@@ -1,6 +1,6 @@
-import UserReference from "../modules/userReferences/userReference.model";
-import Language from "./languages/language.model";
-import LanguageCollaborator from "./languages/languageCollaborator.model";
+import Collaborator from "./collaborator.model";
+import Language from "./language.model";
+import UserReference from "./userReference.model";
 
 Language.hasMany(Language, {
     foreignKey: "publicVersionId",
@@ -20,19 +20,19 @@ Language.belongsTo(UserReference, {
     as: "owner",
 });
 
-Language.hasMany(LanguageCollaborator, {
+Language.hasMany(Collaborator, {
     foreignKey: "languageId",
     sourceKey: "uuid",
     as: "collaborators",
 });
 
-LanguageCollaborator.belongsTo(Language, {
+Collaborator.belongsTo(Language, {
     foreignKey: "languageId",
     targetKey: "uuid",
     as: "language",
 });
 
-LanguageCollaborator.belongsTo(UserReference, {
+Collaborator.belongsTo(UserReference, {
     foreignKey: "userId",
     targetKey: "id",
     as: "user",

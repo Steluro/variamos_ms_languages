@@ -1,4 +1,4 @@
-import "./modules/associations";
+import "./models/associations";
 
 import app from "./app";
 import { sequelize } from "./config/database";

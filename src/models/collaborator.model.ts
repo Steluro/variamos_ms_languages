@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../../config/database";
-import { env } from "../../config/env";
+import { sequelize } from "../config/database";
+import { env } from "../config/env";
 
-const LanguageCollaborator = sequelize.define("LanguageCollaborator", {
+const Collaborator = sequelize.define("Collaborator", {
     languageId: {
         type: DataTypes.UUID,
         primaryKey: true,
@@ -25,8 +25,8 @@ const LanguageCollaborator = sequelize.define("LanguageCollaborator", {
     },
 }, {
     schema: env.database.schema,
-    tableName: "LanguageCollaborators",
+    tableName: "Collaborators",
     timestamps: true,
 });
 
-export default LanguageCollaborator;
+export default Collaborator;

@@ -1,5 +1,5 @@
-import Language from "./language.model";
-import { buildQuery, LanguageQuery } from "./language.query";
+import Language from "../models/language.model";
+import { buildQuery, LanguageQuery } from "../utils/language.query";
 
 export async function findAll(query: LanguageQuery) {
     return Language.findAll(buildQuery(query));

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { LanguageQuery } from "./language.query";
-import * as languageService from "./language.service";
+import * as languageService from "../services/language.service";
+import { LanguageQuery } from "../utils/language.query";
 
 export async function getLanguages(
     req: Request,

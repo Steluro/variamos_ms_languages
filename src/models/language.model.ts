@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
-import { sequelize } from "../../config/database";
-import { env } from "../../config/env";
+import { sequelize } from "../config/database";
+import { env } from "../config/env";
 
 export interface LanguageAttributes {
     uuid: string;

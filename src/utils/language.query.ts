@@ -1,8 +1,8 @@
 import { FindOptions } from "sequelize";
-import UserReference from "../userReferences/userReference.model";
+import Collaborator from "../models/collaborator.model";
+import { LanguageAttributes } from "../models/language.model";
+import UserReference from "../models/userReference.model";
 import { buildFilter, LanguageFilter } from "./language.filter";
-import { LanguageAttributes } from "./language.model";
-import LanguageCollaborator from "./languageCollaborator.model";
 
 export interface LanguageQuery extends LanguageFilter {
     page?: number;
@@ -21,7 +21,7 @@ const builders: ((q: LanguageQuery) => Partial<FindOptions<LanguageAttributes>> 
                     attributes: ["id", "name"],
                 },
                 {
-                    model: LanguageCollaborator,
+                    model: Collaborator,
                     as: "collaborators",
                     attributes: ["role"],
                     include: [

@@ -1,6 +1,6 @@
 import cors from "cors";
 import express from "express";
-import languageRouter from "./modules/languages/language.route";
+import languageRouter from "./routes/language.route";
 
 const app = express();
 

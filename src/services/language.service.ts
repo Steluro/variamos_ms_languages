@@ -1,5 +1,5 @@
-import { LanguageFilter } from "./language.filter";
-import * as languageRepository from "./language.repository";
+import * as languageRepository from "../repositories/language.repository";
+import { LanguageFilter } from "../utils/language.filter";
 
 /**
  * Gets all languages
