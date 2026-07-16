@@ -1,4 +1,4 @@
-import { LanguageFilters } from "./language.filters";
+import { LanguageFilter } from "./language.filter";
 import * as languageRepository from "./language.repository";
 
 /**
@@ -6,7 +6,7 @@ import * as languageRepository from "./language.repository";
  * @param filters The filters to apply
  * @returns The languages
  */
-export async function getLanguages(filters: LanguageFilters) {
+export async function getLanguages(filters: LanguageFilter) {
     return languageRepository.findAll(filters);
 }
 

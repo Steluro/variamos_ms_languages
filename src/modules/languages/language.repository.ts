@@ -1,62 +1,12 @@
-import UserReference from "../userReferences/userReference.model";
-import { LanguageFilters } from "./language.filters";
 import Language from "./language.model";
-import LanguageCollaborator from "./languageCollaborator.model";
+import { buildQuery, LanguageQuery } from "./language.query";
 
-export async function findAll(filters: LanguageFilters) {
-
-    return Language.findAll({
-        where: filters.where,
-        include: [
-            {
-                model: UserReference,
-                as: "owner",
-                attributes: ["id", "name"],
-                where: filters.ownerWhere,
-            },
-            {
-                model: LanguageCollaborator,
-                as: "collaborators",
-                attributes: ["role"],
-                include: [
-                    {
-                        model: UserReference,
-                        as: "user",
-                        attributes: ["id", "name"],
-                    },
-                ],
-            },
-        ],
-        limit: filters.limit,
-        offset: filters.offset,
-    });
+export async function findAll(query: LanguageQuery) {
+    return Language.findAll(buildQuery(query));
 }
 
 export async function findById(uuid: string) {
-    return Language.findOne({
-        where: {
-            uuid,
-        },
-        include: [
-            {
-                model: UserReference,
-                as: "owner",
-                attributes: ["id", "name"],
-            },
-            {
-                model: LanguageCollaborator,
-                as: "collaborators",
-                attributes: ["role"],
-                include: [
-                    {
-                        model: UserReference,
-                        as: "user",
-                        attributes: ["id", "name"],
-                    },
-                ],
-            },
-        ],
-    });
+    return Language.findOne(buildQuery({ uuid }));
 }
 
 export async function create(data: {

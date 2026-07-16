@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { buildLanguageFilters } from "./language.filters";
+import { LanguageQuery } from "./language.query";
 import * as languageService from "./language.service";
 
 export async function getLanguages(
@@ -8,9 +8,9 @@ export async function getLanguages(
     next: NextFunction,
 ) {
     try {
-        const filters = buildLanguageFilters(req.query);
+        const query: LanguageQuery = req.query;
 
-        const languages = await languageService.getLanguages(filters);
+        const languages = await languageService.getLanguages(query);
 
         return res.json(languages);
     } catch (error) {

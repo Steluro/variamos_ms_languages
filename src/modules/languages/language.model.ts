@@ -2,6 +2,17 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/database";
 import { env } from "../../config/env";
 
+export interface LanguageAttributes {
+    uuid: string;
+    name: string;
+    ownerId: string;
+    type: "scope" | "domain" | "application";
+    status: "draft" | "pending" | "published" | "deleted";
+    publicVersionId?: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
 const Language = sequelize.define("Language", {
     uuid: {
         type: DataTypes.UUID,
