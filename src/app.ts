@@ -5,6 +5,7 @@ import languageRouter from "./routes/language.route";
 const app = express();
 
 app.disable("x-powered-by");
+app.set("query parser", "extended");
 
 app.use(cors({
     origin: true,
