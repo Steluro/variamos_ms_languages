@@ -1,45 +1,83 @@
-import { DataTypes } from "sequelize";
+import {
+    CreationOptional,
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+} from "sequelize";
 import { sequelize } from "../config/database";
 import { env } from "../config/env";
+import UserReference from "./userReference.model";
 
-export interface LanguageAttributes {
-    uuid: string;
-    name: string;
-    ownerId: string;
-    type: "scope" | "domain" | "application";
-    status: "draft" | "pending" | "published" | "deleted";
-    publicVersionId?: string;
-    createdAt: Date;
-    updatedAt: Date;
+export enum Types {
+    SCOPE = "scope",
+    DOMAIN = "domain",
+    APPLICATION = "application",
 }
 
-const Language = sequelize.define("Language", {
-    uuid: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-    },
-    name: {
-        type: DataTypes.STRING,
-    },
-    ownerId: {
-        type: DataTypes.STRING,
-    },
-    type: {
-        type: DataTypes.ENUM("scope", "domain", "application"),
-    },
-    status: {
-        type: DataTypes.ENUM("draft", "pending", "published", "deleted"),
-        defaultValue: "draft",
-    },
-    publicVersionId: {
-        type: DataTypes.UUID,
-        allowNull: true,
-    },
-}, {
-    schema: env.database.schema,
-    tableName: "Languages",
-    timestamps: true,
-});
+export enum Status {
+    DRAFT = "draft",
+    PENDING = "pending",
+    PUBLISHED = "published",
+    DELETED = "deleted",
+}
 
-export default Language;
+export default class Language extends Model<
+    InferAttributes<Language, {
+        omit: "createdAt" | "updatedAt";
+    }>,
+    InferCreationAttributes<Language, {
+        omit: "createdAt" | "updatedAt";
+    }>
+> {
+    declare uuid: CreationOptional<string>;
+    declare name: string;
+    declare ownerId: string;
+    declare type: Types;
+    declare status: CreationOptional<Status>;
+    declare publicVersionId: CreationOptional<string | null>;
+
+    declare readonly createdAt: CreationOptional<Date>;
+    declare readonly updatedAt: CreationOptional<Date>;
+}
+
+Language.init(
+    {
+        uuid: {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true,
+        },
+        name: {
+            type: DataTypes.STRING,
+        },
+        ownerId: {
+            type: DataTypes.STRING,
+            references: {
+                model: UserReference,
+                key: UserReference.primaryKeyAttribute,
+            },
+        },
+        type: {
+            type: DataTypes.ENUM(...Object.values(Types)),
+        },
+        status: {
+            type: DataTypes.ENUM(...Object.values(Status)),
+            defaultValue: Status.DRAFT,
+        },
+        publicVersionId: {
+            type: DataTypes.UUID,
+            allowNull: true,
+            references: {
+                model: Language,
+                key: Language.primaryKeyAttribute,
+            },
+        },
+    },
+    {
+        sequelize,
+        schema: env.database.schema,
+        tableName: "Languages",
+        timestamps: true,
+    }
+);

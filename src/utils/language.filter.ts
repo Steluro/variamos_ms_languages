@@ -12,9 +12,6 @@ export interface LanguageFilter {
     updatedAfter?: Date | string;
     ownerId?: string | string[];
     ownerName?: string | string[];
-    collaboratorId?: string | string[];
-    collaboratorName?: string | string[];
-    collaboratorRole?: string | string[];
 }
 
 const builders: ((f: LanguageFilter) => Partial<WhereOptions> | undefined)[] = [
@@ -60,20 +57,6 @@ const builders: ((f: LanguageFilter) => Partial<WhereOptions> | undefined)[] = [
         [Op.or]: (Array.isArray(f.ownerName) ? f.ownerName : f.ownerName.split(",")).map((name) => ({
             '$owner.name$': { [Op.iLike]: `%${name.trim()}%` },
         }))
-    } : undefined,
-
-    (f) => f.collaboratorId ? {
-        '$collaborators.user.id$': { [Op.in]: Array.isArray(f.collaboratorId) ? f.collaboratorId : f.collaboratorId.split(",").map((id) => id.trim()) },
-    } : undefined,
-
-    (f) => f.collaboratorName ? {
-        [Op.or]: (Array.isArray(f.collaboratorName) ? f.collaboratorName : f.collaboratorName.split(",")).map((name) => ({
-            '$collaborators.user.name$': { [Op.iLike]: `%${name.trim()}%` },
-        }))
-    } : undefined,
-
-    (f) => f.collaboratorRole ? {
-        '$collaborators.role$': { [Op.in]: Array.isArray(f.collaboratorRole) ? f.collaboratorRole : f.collaboratorRole.split(",").map((role) => role.trim()) },
     } : undefined,
 ];
 

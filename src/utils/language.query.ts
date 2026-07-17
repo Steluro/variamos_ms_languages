@@ -1,5 +1,4 @@
 import { FindOptions } from "sequelize";
-import Collaborator from "../models/collaborator.model";
 import { LanguageAttributes } from "../models/language.model";
 import UserReference from "../models/userReference.model";
 import { buildFilter, LanguageFilter } from "./language.filter";
@@ -12,29 +11,15 @@ export interface LanguageQuery extends LanguageFilter {
 }
 
 const builders: ((q: LanguageQuery) => Partial<FindOptions<LanguageAttributes>> | undefined)[] = [
-    (_q) => {
-        return {
-            include: [
-                {
-                    model: UserReference,
-                    as: "owner",
-                    attributes: ["id", "name"],
-                },
-                {
-                    model: Collaborator,
-                    as: "collaborators",
-                    attributes: ["role"],
-                    include: [
-                        {
-                            model: UserReference,
-                            as: "user",
-                            attributes: ["id", "name"],
-                        },
-                    ],
-                },
-            ],
-        };
-    },
+    (_q) => ({
+        include: [
+            {
+                model: UserReference,
+                as: "owner",
+                attributes: ["id", "name"],
+            },
+        ],
+    }),
 
     (q) => q ? {
         where: buildFilter(q),

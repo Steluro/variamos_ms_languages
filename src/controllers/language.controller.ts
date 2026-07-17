@@ -9,9 +9,10 @@ export async function getLanguages(
 ) {
     try {
         const query: LanguageQuery = req.query;
-
-        const languages = await languageService.getLanguages(query);
-
+        if (!req.user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+        const languages = await languageService.getLanguages(query, req.user);
         return res.json(languages);
     } catch (error) {
         next(error);
@@ -24,7 +25,10 @@ export async function getLanguage(
     next: NextFunction,
 ) {
     try {
-        const language = await languageService.getLanguage(req.params.uuid as string);
+        if (!req.user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+        const language = await languageService.getLanguage(req.params.uuid as string, req.user);
 
         if (!language) {
             return res.status(404).json({ message: "Language not found" });
@@ -42,7 +46,10 @@ export async function createLanguage(
     next: NextFunction,
 ) {
     try {
-        const language = await languageService.createLanguage(req.body);
+        if (!req.user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+        const language = await languageService.createLanguage(req.body, req.user);
 
         return res.json(language);
     } catch (error) {
@@ -56,9 +63,13 @@ export async function updateLanguage(
     next: NextFunction,
 ) {
     try {
+        if (!req.user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
         const language = await languageService.updateLanguage(
             req.params.uuid as string,
             req.body,
+            req.user,
         );
 
         if (!language) {
@@ -77,8 +88,12 @@ export async function deleteLanguage(
     next: NextFunction,
 ) {
     try {
+        if (!req.user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
         const language = await languageService.deleteLanguage(
             req.params.uuid as string,
+            req.user,
         );
 
         if (!language) {

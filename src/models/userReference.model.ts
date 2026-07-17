@@ -1,11 +1,21 @@
-import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/database';
+import {
+    CreationOptional,
+    DataTypes,
+    InferAttributes,
+    InferCreationAttributes,
+    Model,
+} from "sequelize";
+import { sequelize } from "../config/database";
 
-/**
- * HACK: Replace this model with an actual user reference with event sourcing
- */
-const UserReference = sequelize.define(
-    'UserReference',
+export default class UserReference extends Model<
+    InferAttributes<UserReference>,
+    InferCreationAttributes<UserReference>
+> {
+    declare id: CreationOptional<string>;
+    declare name: string;
+}
+
+UserReference.init(
     {
         id: {
             type: DataTypes.STRING,
@@ -18,10 +28,9 @@ const UserReference = sequelize.define(
         },
     },
     {
+        sequelize,
         schema: "variamos",
-        tableName: 'user',
+        tableName: "user",
         timestamps: true,
     }
 );
-
-export default UserReference;
