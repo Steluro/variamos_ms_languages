@@ -1,16 +1,16 @@
 import { FindOptions } from "sequelize";
-import { LanguageAttributes } from "../models/language.model";
+import Language from "../models/language.model";
 import UserReference from "../models/userReference.model";
 import { buildFilter, LanguageFilter } from "./language.filter";
 
 export interface LanguageQuery extends LanguageFilter {
     page?: number;
     pageSize?: number;
-    sortBy?: keyof LanguageAttributes;
+    sortBy?: keyof Language;
     sortOrder?: 'ASC' | 'DESC';
 }
 
-const builders: ((q: LanguageQuery) => Partial<FindOptions<LanguageAttributes>> | undefined)[] = [
+const builders: ((q: LanguageQuery) => Partial<FindOptions<Language>> | undefined)[] = [
     (_q) => ({
         include: [
             {
@@ -35,9 +35,9 @@ const builders: ((q: LanguageQuery) => Partial<FindOptions<LanguageAttributes>> 
     } : undefined,
 ];
 
-export function buildQuery(query: LanguageQuery): FindOptions<LanguageAttributes> {
+export function buildQuery(query: LanguageQuery): FindOptions<Language> {
     return builders.reduce(
         (options, builder) => Object.assign(options, builder(query)),
-        {} as FindOptions<LanguageAttributes>
+        {} as FindOptions<Language>
     );
 }

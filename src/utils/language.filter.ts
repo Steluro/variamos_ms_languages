@@ -1,5 +1,5 @@
 import { Op, WhereOptions } from "sequelize";
-import { LanguageAttributes } from "../models/language.model";
+import Language from "../models/language.model";
 
 export interface LanguageFilter {
     uuid?: string | string[];
@@ -60,9 +60,9 @@ const builders: ((f: LanguageFilter) => Partial<WhereOptions> | undefined)[] = [
     } : undefined,
 ];
 
-export function buildFilter(filter: LanguageFilter): WhereOptions<LanguageAttributes> {
+export function buildFilter(filter: LanguageFilter): WhereOptions<Language> {
     return builders.reduce(
         (where, builder) => Object.assign(where, builder(filter)),
-        {} as WhereOptions<LanguageAttributes>
+        {} as WhereOptions<Language>
     );
 }
