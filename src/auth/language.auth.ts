@@ -34,7 +34,7 @@ export function ensureCanUpdate(user: SessionUser, language: Language) {
 }
 
 export function ensureCanDelete(user: SessionUser, language: Language) {
-    if (language.ownerId === user.id) {
+    if (language.ownerId === user.id && language.status === Status.DRAFT) {
         ensurePermission(user, "languages::delete::own");
         return;
     }
