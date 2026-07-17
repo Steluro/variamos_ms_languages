@@ -1,7 +1,8 @@
 import "dotenv/config";
 
 export const env = {
-    nodeEnv: process.env.NODE_ENV,
+    nodeEnv: process.env.NODE_ENV ?? "development",
+    bypassAuth: process.env.BYPASS_AUTH === "true",
 
     port: Number(process.env.PORT ?? 3000),
 
@@ -12,10 +13,5 @@ export const env = {
         user: process.env.DB_USER ?? "",
         password: process.env.DB_PASSWORD ?? "",
         schema: process.env.DB_SCHEMA ?? "public",
-    },
-
-    jwt: {
-        secret: process.env.JWT_SECRET ?? "",
-        expiresIn: process.env.JWT_EXPIRES_IN ?? "",
     },
 };
