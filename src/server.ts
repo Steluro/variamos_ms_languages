@@ -1,5 +1,6 @@
 import "./models/associations";
 
+import { initKeyStore } from "@variamosple/variamos-security";
 import app from "./app";
 import { sequelize } from "./config/database";
 import { env } from "./config/env";
@@ -17,6 +18,9 @@ const server = app.listen(PORT, () => {
         .catch((err) => {
             console.error("Unable to connect to the database:", err);
         });
+
+    console.log("Initializing VariaMos-security keystore...");
+    initKeyStore();
 });
 
 const shutdown = async () => {
