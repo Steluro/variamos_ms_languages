@@ -1,5 +1,5 @@
-import { isAuthenticated } from "@variamosple/variamos-security";
 import { Router } from "express";
+import { isAuthenticated } from "../auth";
 import * as contributorController from "../controllers/collaborator.controller";
 
 const collaboratorRouter = Router();
