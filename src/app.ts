@@ -1,6 +1,7 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
+import collaboratorRouter from "./routes/collaborator.route";
 import languageRouter from "./routes/language.route";
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("", languageRouter);
+app.use("", collaboratorRouter);
 
 app.use((req, res, next) => {
   console.log("Session:", req.cookies);
