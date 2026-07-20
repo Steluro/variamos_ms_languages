@@ -8,60 +8,65 @@ import {
 import { sequelize } from "../config/database";
 import { env } from "../config/env";
 import Language from "./language.model";
-import UserReference from "./userReference.model";
 
-export default class Collaborator extends Model<
+export default class RelationType extends Model<
   InferAttributes<
-    Collaborator,
+    RelationType,
     {
       omit: "createdAt" | "updatedAt";
     }
   >,
   InferCreationAttributes<
-    Collaborator,
+    RelationType,
     {
       omit: "createdAt" | "updatedAt";
     }
   >
 > {
   declare languageId: string;
-  declare userId: string;
-  declare role: CreationOptional<"manager" | "editor" | "viewer">;
+  declare uuid: CreationOptional<string>;
+  declare name: string;
+  declare description: CreationOptional<string>;
+  declare constraint: CreationOptional<string>;
 
   declare readonly createdAt: CreationOptional<Date>;
   declare readonly updatedAt: CreationOptional<Date>;
 }
 
-Collaborator.init(
+RelationType.init(
   {
     languageId: {
       type: DataTypes.UUID,
-      primaryKey: true,
       allowNull: false,
       references: {
         model: Language,
         key: Language.primaryKeyAttribute,
       },
     },
-    userId: {
-      type: DataTypes.STRING,
+    uuid: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      allowNull: false,
-      references: {
-        model: UserReference,
-        key: UserReference.primaryKeyAttribute,
-      },
     },
-    role: {
-      type: DataTypes.ENUM("manager", "editor", "viewer"),
+    name: {
+      type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: "viewer",
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
+    constraint: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
     },
   },
   {
     sequelize,
     schema: env.database.schema,
-    tableName: "Collaborators",
+    tableName: "RelationTypes",
     timestamps: true,
   },
 );

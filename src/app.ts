@@ -7,29 +7,36 @@ const app = express();
 app.disable("x-powered-by");
 app.set("query parser", "extended");
 
-app.use(cors({
+app.use(
+  cors({
     origin: true,
     credentials: true,
-}));
+  }),
+);
 app.use(express.json());
 
 app.use("", languageRouter);
 
-app.use(
-    (
-        err: any,
-        _req: express.Request,
-        res: express.Response,
-        _next: express.NextFunction
-    ) => {
-        console.error("ERROR:", err);
-        console.error("MESSAGE:", err.message);
-        console.error("STACK:", err.stack);
+app.use((req, res, next) => {
+  console.log("Session:", req.cookies);
+  next();
+});
 
-        res.status(500).json({
-            message: err.message,
-        });
-    }
+app.use(
+  (
+    err: any,
+    _req: express.Request,
+    res: express.Response,
+    _next: express.NextFunction,
+  ) => {
+    console.error("ERROR:", err);
+    console.error("MESSAGE:", err.message);
+    console.error("STACK:", err.stack);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  },
 );
 
 export default app;
