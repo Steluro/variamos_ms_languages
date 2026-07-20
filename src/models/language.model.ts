@@ -7,6 +7,7 @@ import {
 } from "sequelize";
 import { sequelize } from "../config/database";
 import { env } from "../config/env";
+import Collaborator from "./collaborator.model";
 import UserReference from "./userReference.model";
 
 export enum Types {
@@ -45,6 +46,8 @@ export default class Language extends Model<
 
   declare readonly createdAt: CreationOptional<Date>;
   declare readonly updatedAt: CreationOptional<Date>;
+
+  declare collaborators?: Collaborator[];
 }
 
 Language.init(

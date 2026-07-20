@@ -10,6 +10,12 @@ import { env } from "../config/env";
 import Language from "./language.model";
 import UserReference from "./userReference.model";
 
+export enum CollaboratorRole {
+  MANAGER = "manager",
+  EDITOR = "editor",
+  VIEWER = "viewer",
+}
+
 export default class Collaborator extends Model<
   InferAttributes<
     Collaborator,
@@ -26,7 +32,7 @@ export default class Collaborator extends Model<
 > {
   declare languageId: string;
   declare userId: string;
-  declare role: CreationOptional<"manager" | "editor" | "viewer">;
+  declare role: CreationOptional<CollaboratorRole>;
 
   declare readonly createdAt: CreationOptional<Date>;
   declare readonly updatedAt: CreationOptional<Date>;
@@ -53,9 +59,9 @@ Collaborator.init(
       },
     },
     role: {
-      type: DataTypes.ENUM("manager", "editor", "viewer"),
+      type: DataTypes.ENUM(...Object.values(CollaboratorRole)),
       allowNull: false,
-      defaultValue: "viewer",
+      defaultValue: CollaboratorRole.VIEWER,
     },
   },
   {
