@@ -7,7 +7,6 @@ import {
 } from "sequelize";
 import { sequelize } from "../config/database";
 import { env } from "../config/env";
-import ElementType from "./elementType.model";
 import RelationType from "./relationType.model";
 
 export default class EndpointType extends Model<
@@ -24,9 +23,10 @@ export default class EndpointType extends Model<
     }
   >
 > {
+  declare uuid: CreationOptional<string>;
   declare relationTypeId: string;
-  declare elementTypeId: string;
   declare name: string;
+  declare arity: number;
   declare style: CreationOptional<Record<string, unknown>>;
 
   declare readonly createdAt: CreationOptional<Date>;
@@ -35,27 +35,26 @@ export default class EndpointType extends Model<
 
 EndpointType.init(
   {
-    relationTypeId: {
+    uuid: {
       type: DataTypes.UUID,
       primaryKey: true,
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    relationTypeId: {
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: RelationType,
         key: RelationType.primaryKeyAttribute,
       },
     },
-    elementTypeId: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      allowNull: false,
-      references: {
-        model: ElementType,
-        key: ElementType.primaryKeyAttribute,
-      },
-    },
     name: {
       type: DataTypes.STRING,
-      primaryKey: true,
+      allowNull: false,
+    },
+    arity: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     style: {

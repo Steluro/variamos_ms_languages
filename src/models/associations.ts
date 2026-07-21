@@ -65,8 +65,9 @@ EndpointType.belongsTo(RelationType, {
   as: "relationType",
 });
 
-EndpointType.hasOne(ElementType, {
-  foreignKey: "uuid",
-  sourceKey: "elementTypeId",
+ElementType.belongsToMany(EndpointType, {
+  foreignKey: "elementTypeId",
+  otherKey: "endpointTypeId",
   as: "elementType",
+  through: "EndpointTypes__ElementTypes",
 });

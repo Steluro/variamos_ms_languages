@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import collaboratorRouter from "./routes/collaborator.route";
 import elementTypeRouter from "./routes/elementType.route";
+import endpointTypeRouter from "./routes/endpointType.route";
 import languageRouter from "./routes/language.route";
 import relationTypeRouter from "./routes/relationType.route";
 
@@ -24,6 +25,7 @@ app.use("", languageRouter);
 app.use("", collaboratorRouter);
 app.use("", elementTypeRouter);
 app.use("", relationTypeRouter);
+app.use("", endpointTypeRouter);
 
 app.use((req, res, next) => {
   console.log("Session:", req.cookies);
