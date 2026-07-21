@@ -7,12 +7,16 @@ export async function getLanguageCollaboratorss(uuid: string) {
     where: { uuid },
     include: [
       {
-        model: UserReference,
+        model: Collaborator,
         as: "collaborators",
-        attributes: ["id", "name"],
-        through: {
-          attributes: ["role"],
-        },
+        attributes: ["role"],
+        include: [
+          {
+            model: UserReference,
+            as: "user",
+            attributes: ["id", "name"],
+          },
+        ],
       },
     ],
   });
