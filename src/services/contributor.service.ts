@@ -31,6 +31,9 @@ export async function addLanguageCollaborators(
   if (!language) {
     throw new Error("Language not found");
   }
+  if (data.userId === language.ownerId) {
+    throw new Error("You cannot add the owner as a collaborator");
+  }
   ensureCanManageCollaborators(user, language);
   return collaboratorRepository.addLanguageCollaborators(uuid, data);
 }
