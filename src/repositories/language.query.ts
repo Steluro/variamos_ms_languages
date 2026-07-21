@@ -23,7 +23,7 @@ const builders: ((
       {
         model: Language,
         as: "publicVersion",
-        attributes: ["id", "name"],
+        attributes: ["uuid", "name"],
       },
     ],
   }),

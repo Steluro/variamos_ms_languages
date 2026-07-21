@@ -6,8 +6,8 @@ import {
   ensureCanUpdate,
 } from "../auth/language.auth";
 import { Types } from "../models/language.model";
+import { LanguageQuery } from "../repositories/language.query";
 import * as languageRepository from "../repositories/language.repository";
-import { LanguageQuery } from "./language.query";
 
 export async function getLanguages(query: LanguageQuery, user: SessionUser) {
   const languages = await languageRepository.findAll(query);

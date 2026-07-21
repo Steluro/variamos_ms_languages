@@ -1,5 +1,5 @@
 import Language, { Status, Types } from "../models/language.model";
-import { buildQuery, LanguageQuery } from "../services/language.query";
+import { buildQuery, LanguageQuery } from "./language.query";
 
 export async function findAll(query: LanguageQuery) {
   const languages = await Language.findAll(buildQuery(query));
