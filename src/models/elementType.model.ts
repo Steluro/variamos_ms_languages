@@ -28,6 +28,7 @@ export class ElementType extends Model<
   declare name: string;
   declare description: CreationOptional<string>;
   declare style: CreationOptional<Record<string, unknown>>;
+  declare properties: CreationOptional<Record<string, unknown>>;
   declare constraint: CreationOptional<string>;
 
   declare readonly createdAt: CreationOptional<Date>;
@@ -76,6 +77,11 @@ ElementType.init(
           color: "#000000",
         },
       },
+    },
+    properties: {
+      type: DataTypes.JSONB,
+      allowNull: false,
+      defaultValue: {},
     },
     constraint: {
       type: DataTypes.STRING,

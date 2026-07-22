@@ -40,6 +40,9 @@ export async function createRelationType(
     languageId: string;
     name: string;
     description: string;
+    style?: Record<string, unknown>;
+    properties?: Record<string, unknown>;
+    constraint?: string;
   },
   user: SessionUser,
 ) {
@@ -57,6 +60,9 @@ export async function updateRelationType(
   data: Partial<{
     name: string;
     description: string;
+    style: Record<string, unknown>;
+    properties: Record<string, unknown>;
+    constraint: string;
   }>,
   user: SessionUser,
 ) {

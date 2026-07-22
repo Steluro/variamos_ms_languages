@@ -27,6 +27,7 @@ export default class RelationType extends Model<
   declare uuid: CreationOptional<string>;
   declare name: string;
   declare description: CreationOptional<string>;
+  declare properties: CreationOptional<Record<string, unknown>>;
   declare constraint: CreationOptional<string>;
 
   declare readonly createdAt: CreationOptional<Date>;
@@ -56,6 +57,11 @@ RelationType.init(
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "",
+    },
+    properties: {
+      type: DataTypes.JSONB,
+      allowNull: false,
+      defaultValue: {},
     },
     constraint: {
       type: DataTypes.STRING,

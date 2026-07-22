@@ -26,6 +26,7 @@ export async function update(
     name: string;
     description: string;
     style: Record<string, unknown>;
+    properties: Record<string, unknown>;
     constraint: string;
   }>,
 ) {
