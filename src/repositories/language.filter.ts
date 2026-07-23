@@ -14,6 +14,7 @@ export interface LanguageFilter {
   ownerName?: string | string[];
   publicVersionId?: string | string[];
   collaboratorId?: string | string[];
+  collaboratorRole?: string | string[];
 }
 
 const builders: ((f: LanguageFilter) => Partial<WhereOptions> | undefined)[] = [
@@ -120,6 +121,16 @@ const builders: ((f: LanguageFilter) => Partial<WhereOptions> | undefined)[] = [
             [Op.in]: Array.isArray(f.collaboratorId)
               ? f.collaboratorId
               : f.collaboratorId.split(",").map((id) => id.trim()),
+          },
+        }
+      : undefined,
+  (f) =>
+    f.collaboratorRole
+      ? {
+          "$collaborators.role$": {
+            [Op.in]: Array.isArray(f.collaboratorRole)
+              ? f.collaboratorRole
+              : f.collaboratorRole.split(",").map((role) => role.trim()),
           },
         }
       : undefined,

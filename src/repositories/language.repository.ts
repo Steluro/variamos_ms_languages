@@ -3,11 +3,17 @@ import { buildQuery, LanguageQuery } from "./language.query";
 
 export async function findAll(query: LanguageQuery) {
   const languages = await Language.findAll(buildQuery(query));
+  languages.forEach((language) => {
+    delete language.dataValues.collaborators;
+  });
   return languages;
 }
 
 export async function findById(uuid: string) {
   const language = await Language.findOne(buildQuery({ uuid }));
+  if (language) {
+    delete language.dataValues.collaborators;
+  }
   return language;
 }
 
