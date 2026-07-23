@@ -12,6 +12,8 @@ export interface LanguageFilter {
   updatedAfter?: Date | string;
   ownerId?: string | string[];
   ownerName?: string | string[];
+  publicVersionId?: string | string[];
+  collaboratorId?: string | string[];
 }
 
 const builders: ((f: LanguageFilter) => Partial<WhereOptions> | undefined)[] = [
@@ -99,6 +101,26 @@ const builders: ((f: LanguageFilter) => Partial<WhereOptions> | undefined)[] = [
           ).map((name) => ({
             "$owner.name$": { [Op.iLike]: `%${name.trim()}%` },
           })),
+        }
+      : undefined,
+  (f) =>
+    f.publicVersionId
+      ? {
+          publicVersionId: {
+            [Op.in]: Array.isArray(f.publicVersionId)
+              ? f.publicVersionId
+              : f.publicVersionId.split(",").map((id) => id.trim()),
+          },
+        }
+      : undefined,
+  (f) =>
+    f.collaboratorId
+      ? {
+          "$collaborators.user.id$": {
+            [Op.in]: Array.isArray(f.collaboratorId)
+              ? f.collaboratorId
+              : f.collaboratorId.split(",").map((id) => id.trim()),
+          },
         }
       : undefined,
 ];

@@ -1,4 +1,5 @@
 import { FindOptions } from "sequelize";
+import Collaborator from "../models/collaborator.model";
 import Language from "../models/language.model";
 import UserReference from "../models/userReference.model";
 import { buildFilter, LanguageFilter } from "./language.filter";
@@ -24,6 +25,18 @@ const builders: ((
         model: Language,
         as: "publicVersion",
         attributes: ["uuid", "name"],
+      },
+      {
+        model: Collaborator,
+        as: "collaborators",
+        attributes: ["role"],
+        include: [
+          {
+            model: UserReference,
+            as: "user",
+            attributes: ["id", "name"],
+          },
+        ],
       },
     ],
   }),
