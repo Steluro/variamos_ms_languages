@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { CollaboratorRole } from "../models/collaborator.model";
-import * as contributorService from "../services/contributor.service";
+import * as contributorService from "../services/collaborator.service";
 
 export async function getLanguageCollaboratorss(
   req: Request,
