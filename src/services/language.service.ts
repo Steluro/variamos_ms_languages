@@ -13,7 +13,7 @@ export async function getLanguages(query: LanguageQuery, user: SessionUser) {
   const languages = await languageRepository.findAll(query);
   const filtered_languages = languages.filter((language) => {
     try {
-    ensureCanRead(user, language);
+      ensureCanRead(user, language);
       return true
     } catch {
       return false

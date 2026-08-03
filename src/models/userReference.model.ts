@@ -13,6 +13,7 @@ export default class UserReference extends Model<
 > {
   declare id: CreationOptional<string>;
   declare name: string;
+  declare email: string;
 }
 
 UserReference.init(
@@ -23,6 +24,10 @@ UserReference.init(
       primaryKey: true,
     },
     name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
     },
