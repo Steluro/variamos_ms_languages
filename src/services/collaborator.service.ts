@@ -6,6 +6,8 @@ import {
 import { CollaboratorRole } from "../models/collaborator.model";
 import * as collaboratorRepository from "../repositories/collaborator.repository";
 import * as languageRepository from "../repositories/language.repository";
+import UserReference from "../models/userReference.model";
+import { findUserByEmail } from "../repositories/userReference.repository";
 
 export async function getLanguageCollaboratorss(
   uuid: string,
@@ -22,7 +24,7 @@ export async function getLanguageCollaboratorss(
 export async function addLanguageCollaborators(
   uuid: string,
   data: {
-    userId: string;
+    userEmail: string;
     role: CollaboratorRole;
   },
   user: SessionUser,
@@ -31,11 +33,18 @@ export async function addLanguageCollaborators(
   if (!language) {
     throw new Error("Language not found");
   }
-  if (data.userId === language.ownerId) {
+  const collaborator = await findUserByEmail(data.userEmail);
+  if (!collaborator) {
+    throw new Error("Collaborator not found");
+  }
+  if (collaborator?.id === language.ownerId) {
     throw new Error("You cannot add the owner as a collaborator");
   }
   ensureCanManageCollaborators(user, language);
-  return collaboratorRepository.addLanguageCollaborators(uuid, data);
+  return collaboratorRepository.addLanguageCollaborators(uuid, {
+    userId: collaborator!.id,
+    role: data.role,
+  });
 }
 
 export async function updateLanguageCollaboratorRole(
