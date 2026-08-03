@@ -11,10 +11,15 @@ import * as languageRepository from "../repositories/language.repository";
 
 export async function getLanguages(query: LanguageQuery, user: SessionUser) {
   const languages = await languageRepository.findAll(query);
-  languages.forEach((language) => {
+  const filtered_languages = languages.filter((language) => {
+    try {
     ensureCanRead(user, language);
+      return true
+    } catch {
+      return false
+    }
   });
-  return languages;
+  return filtered_languages;
 }
 
 export async function getLanguage(uuid: string, user: SessionUser) {
