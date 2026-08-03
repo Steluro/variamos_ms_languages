@@ -19,7 +19,6 @@ const builders: ((
       {
         model: UserReference,
         as: "owner",
-        attributes: ["id", "name"],
       },
       {
         model: Language,
@@ -34,7 +33,6 @@ const builders: ((
           {
             model: UserReference,
             as: "user",
-            attributes: ["id", "name"],
           },
         ],
       },
