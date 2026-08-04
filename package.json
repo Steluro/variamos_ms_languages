@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@variamosple/variamos-security": "^0.0.15",
+    "ajv": "^8.20.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

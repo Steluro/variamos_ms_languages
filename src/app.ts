@@ -6,6 +6,7 @@ import elementTypeRouter from "./routes/elementType.route";
 import endpointTypeRouter from "./routes/endpointType.route";
 import languageRouter from "./routes/language.route";
 import relationTypeRouter from "./routes/relationType.route";
+import externalFunctionRouter from "./routes/old.externalFunction.route";
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use("", collaboratorRouter);
 app.use("", elementTypeRouter);
 app.use("", relationTypeRouter);
 app.use("", endpointTypeRouter);
+app.use("", externalFunctionRouter);
 
 app.use((req, res, next) => {
   console.log("Session:", req.cookies);
