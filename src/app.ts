@@ -29,7 +29,7 @@ app.use("", relationTypeRouter);
 app.use("", endpointTypeRouter);
 app.use("", externalFunctionRouter);
 
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   console.log("Session:", req.cookies);
   next();
 });
