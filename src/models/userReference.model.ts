@@ -36,6 +36,6 @@ UserReference.init(
     sequelize,
     schema: "variamos",
     tableName: "user",
-    timestamps: true,
+    timestamps: false,
   },
 );

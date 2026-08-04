@@ -23,7 +23,6 @@ const builders: ((
       {
         model: Language,
         as: "publicVersion",
-        attributes: ["uuid", "name"],
       },
       {
         model: Collaborator,

@@ -47,6 +47,8 @@ export default class Language extends Model<
   declare readonly createdAt: CreationOptional<Date>;
   declare readonly updatedAt: CreationOptional<Date>;
 
+  declare owner?: UserReference;
+  declare publicVersion?: Language;
   declare collaborators?: Collaborator[];
 }
 
