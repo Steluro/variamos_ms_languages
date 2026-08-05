@@ -14,7 +14,7 @@ export async function getLanguageCollaboratorss(uuid: string) {
           {
             model: UserReference,
             as: "user",
-            attributes: ["id", "name"],
+            attributes: ["id", "name", "email"],
           },
         ],
       },
