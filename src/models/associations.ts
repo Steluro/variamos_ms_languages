@@ -1,15 +1,10 @@
 import Collaborator from "./collaborator.model";
 import ElementType from "./elementType.model";
-import EndpointType from "./endpointType.model";
 import Language from "./language.model";
+import ReificationType from "./reificationType.model";
+import ReificationTypeEndpoint from "./reificationTypeEndpoint.model";
 import RelationType from "./relationType.model";
 import UserReference from "./userReference.model";
-
-Language.hasMany(Language, {
-  foreignKey: "publicVersionId",
-  sourceKey: "uuid",
-  as: "drafts",
-});
 
 Language.belongsTo(Language, {
   foreignKey: "publicVersionId",
@@ -29,45 +24,46 @@ Language.hasMany(Collaborator, {
   as: "collaborators",
 });
 
-Collaborator.belongsTo(Language, {
-  foreignKey: "languageId",
-  targetKey: "uuid",
-  as: "language",
-});
-
 Collaborator.belongsTo(UserReference, {
   foreignKey: "userId",
   targetKey: "id",
   as: "user",
 });
 
-ElementType.belongsTo(Language, {
+Language.hasMany(ElementType, {
   foreignKey: "languageId",
-  targetKey: "uuid",
-  as: "language",
-});
-
-RelationType.belongsTo(Language, {
-  foreignKey: "languageId",
-  targetKey: "uuid",
-  as: "language",
-});
-
-RelationType.hasMany(EndpointType, {
-  foreignKey: "relationTypeId",
   sourceKey: "uuid",
-  as: "endpointTypes",
+  as: "elementTypes",
 });
 
-EndpointType.belongsTo(RelationType, {
+Language.hasMany(RelationType, {
+  foreignKey: "languageId",
+  sourceKey: "uuid",
+  as: "relationTypes",
+});
+
+RelationType.belongsToMany(ElementType, {
+  through: "RelationTypes_Sources",
   foreignKey: "relationTypeId",
-  targetKey: "uuid",
-  as: "relationType",
+  otherKey: "elementTypeId",
+  as: "sources",
 });
 
-ElementType.belongsToMany(EndpointType, {
-  foreignKey: "elementTypeId",
-  otherKey: "endpointTypeId",
-  as: "elementType",
-  through: "EndpointTypes__ElementTypes",
+RelationType.belongsToMany(ElementType, {
+  through: "RelationTypes_Targets",
+  foreignKey: "relationTypeId",
+  otherKey: "elementTypeId",
+  as: "targets",
+});
+
+Language.hasMany(ReificationType, {
+  foreignKey: "languageId",
+  sourceKey: "uuid",
+  as: "reificationTypes",
+});
+
+ReificationType.hasMany(ReificationTypeEndpoint, {
+  foreignKey: "reificationTypeId",
+  sourceKey: "uuid",
+  as: "endpoints",
 });

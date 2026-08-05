@@ -7,33 +7,35 @@ import {
 } from "sequelize";
 import { sequelize } from "../config/database";
 import { env } from "../config/env";
-import RelationType from "./relationType.model";
+import ReificationType from "./reificationType.model";
 
-export default class EndpointType extends Model<
+export default class ReificationTypeEndpoint extends Model<
   InferAttributes<
-    EndpointType,
+    ReificationTypeEndpoint,
     {
       omit: "createdAt" | "updatedAt";
     }
   >,
   InferCreationAttributes<
-    EndpointType,
+    ReificationTypeEndpoint,
     {
       omit: "createdAt" | "updatedAt";
     }
   >
 > {
-  declare uuid: CreationOptional<string>;
-  declare relationTypeId: string;
+  declare readonly uuid: CreationOptional<string>;
+  declare readonly reificationTypeId: string;
   declare name: string;
-  declare arity: number;
+  declare arity: number; // '-1' means infinite
   declare style: CreationOptional<Record<string, unknown>>;
 
   declare readonly createdAt: CreationOptional<Date>;
   declare readonly updatedAt: CreationOptional<Date>;
+
+  declare elementTypes?: Element[];
 }
 
-EndpointType.init(
+ReificationTypeEndpoint.init(
   {
     uuid: {
       type: DataTypes.UUID,
@@ -41,12 +43,12 @@ EndpointType.init(
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
     },
-    relationTypeId: {
+    reificationTypeId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: RelationType,
-        key: RelationType.primaryKeyAttribute,
+        model: ReificationType,
+        key: ReificationType.primaryKeyAttribute,
       },
     },
     name: {
@@ -78,7 +80,7 @@ EndpointType.init(
   {
     sequelize,
     schema: env.database.schema,
-    tableName: "EndpointTypes",
+    tableName: "ReificationTypeEndpoints",
     timestamps: true,
   },
 );

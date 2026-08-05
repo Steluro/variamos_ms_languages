@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import * as endpointTypeService from "../services/endpointType.service";
+import * as reificationTypeService from "../services/reificationType.service";
 
-export async function getRelationTypeEndpointTypes(
+export async function getLanguageReificationTypes(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -10,18 +10,18 @@ export async function getRelationTypeEndpointTypes(
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const endpointTypes =
-      await endpointTypeService.getRelationTypeEndpointTypes(
-        req.params.relationTypeId as string,
+    const reificationTypes =
+      await reificationTypeService.getLanguageReificationTypes(
+        req.params.languageId as string,
         req.user,
       );
-    return res.json(endpointTypes);
+    return res.json(reificationTypes);
   } catch (error) {
     next(error);
   }
 }
 
-export async function getEndpointType(
+export async function getReificationType(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -30,17 +30,22 @@ export async function getEndpointType(
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const endpointType = await endpointTypeService.getEndpointType(
+    const relationType = await reificationTypeService.getReificationType(
       req.params.uuid as string,
       req.user,
     );
-    return res.json(endpointType);
+
+    if (!relationType) {
+      return res.status(404).json({ message: "Reification type not found" });
+    }
+
+    return res.json(relationType);
   } catch (error) {
     next(error);
   }
 }
 
-export async function createEndpointType(
+export async function createReificationType(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -49,17 +54,17 @@ export async function createEndpointType(
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const endpointType = await endpointTypeService.createEndpointType(
+    const reificationType = await reificationTypeService.createReificationType(
       req.body,
       req.user,
     );
-    return res.json(endpointType);
+    return res.json(reificationType);
   } catch (error) {
     next(error);
   }
 }
 
-export async function updateEndpointType(
+export async function updateReificationType(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -68,18 +73,18 @@ export async function updateEndpointType(
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const endpointType = await endpointTypeService.updateEndpointType(
+    const reificationType = await reificationTypeService.updateReificationType(
       req.params.uuid as string,
       req.body,
       req.user,
     );
-    return res.json(endpointType);
+    return res.json(reificationType);
   } catch (error) {
     next(error);
   }
 }
 
-export async function deleteEndpointType(
+export async function deleteReificationType(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -88,11 +93,11 @@ export async function deleteEndpointType(
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    await endpointTypeService.deleteEndpointType(
+    const reificationType = await reificationTypeService.deleteReificationType(
       req.params.uuid as string,
       req.user,
     );
-    return res.status(204).send();
+    return res.json(reificationType);
   } catch (error) {
     next(error);
   }

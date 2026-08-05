@@ -8,23 +8,24 @@ import {
 import { sequelize } from "../config/database";
 import { env } from "../config/env";
 import Language from "./language.model";
+import ReificationTypeEndpoint from "./reificationTypeEndpoint.model";
 
-export default class RelationType extends Model<
+export default class ReificationType extends Model<
   InferAttributes<
-    RelationType,
+    ReificationType,
     {
       omit: "createdAt" | "updatedAt";
     }
   >,
   InferCreationAttributes<
-    RelationType,
+    ReificationType,
     {
       omit: "createdAt" | "updatedAt";
     }
   >
 > {
-  declare languageId: string;
-  declare uuid: CreationOptional<string>;
+  declare readonly languageId: string;
+  declare readonly uuid: CreationOptional<string>;
   declare name: string;
   declare description: CreationOptional<string>;
   declare style: CreationOptional<Record<string, unknown>>;
@@ -34,11 +35,10 @@ export default class RelationType extends Model<
   declare readonly createdAt: CreationOptional<Date>;
   declare readonly updatedAt: CreationOptional<Date>;
 
-  declare sources?: Element[];
-  declare targets?: Element[];
+  declare endpoints?: ReificationTypeEndpoint[];
 }
 
-RelationType.init(
+ReificationType.init(
   {
     languageId: {
       type: DataTypes.UUID,
@@ -66,16 +66,19 @@ RelationType.init(
       type: DataTypes.JSONB,
       allowNull: false,
       defaultValue: {
+        shape: "circle",
+        fill: {
+          type: "solid",
+          value: "#ffffff",
+        },
         stroke: {
           type: "solid",
+          value: "#000000",
+          width: 1,
+        },
+        font: {
+          size: 12,
           color: "#000000",
-          width: 2,
-        },
-        sourceArrow: {
-          type: "none",
-        },
-        targetArrow: {
-          type: "none",
         },
       },
     },
@@ -93,7 +96,7 @@ RelationType.init(
   {
     sequelize,
     schema: env.database.schema,
-    tableName: "RelationTypes",
+    tableName: "ReificationTypes",
     timestamps: true,
   },
 );

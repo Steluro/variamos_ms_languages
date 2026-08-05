@@ -3,10 +3,11 @@ import cors from "cors";
 import express from "express";
 import collaboratorRouter from "./routes/collaborator.route";
 import elementTypeRouter from "./routes/elementType.route";
-import endpointTypeRouter from "./routes/endpointType.route";
 import languageRouter from "./routes/language.route";
 import relationTypeRouter from "./routes/relationType.route";
 import externalFunctionRouter from "./routes/old.externalFunction.route";
+import reificationTypeRouter from "./routes/reificationType.route";
+import reificationTypeEndpointRouter from "./routes/reificationTypeEndpoint.route";
 
 const app = express();
 
@@ -26,7 +27,8 @@ app.use("", languageRouter);
 app.use("", collaboratorRouter);
 app.use("", elementTypeRouter);
 app.use("", relationTypeRouter);
-app.use("", endpointTypeRouter);
+app.use("", reificationTypeRouter);
+app.use("", reificationTypeEndpointRouter);
 app.use("", externalFunctionRouter);
 
 app.use((req, _res, next) => {
