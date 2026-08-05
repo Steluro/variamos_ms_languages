@@ -1,32 +1,24 @@
 import Language, { Status, Types } from "../models/language.model";
 import { buildQuery, LanguageQuery } from "./language.query";
 
-export async function findAll(query: LanguageQuery) {
-  const languages = await Language.findAll(buildQuery(query));
-  languages.forEach((language) => {
-    delete language.dataValues.collaborators;
-  });
-  return languages;
+export function findAll(query: LanguageQuery) {
+  return Language.findAll(buildQuery(query));
 }
 
-export async function findById(uuid: string) {
-  const language = await Language.findOne(buildQuery({ uuid }));
-  if (language) {
-    delete language.dataValues.collaborators;
-  }
-  return language;
+export function findById(uuid: string) {
+  return Language.findOne(buildQuery({ uuid }));
 }
 
-export async function create(data: {
+export function create(data: {
   name: string;
   ownerId: string;
   type: Types;
   publicVersionId?: string;
 }) {
-  return await Language.create(data);
+  return Language.create(data);
 }
 
-export async function update(
+export function update(
   uuid: string,
   data: Partial<{
     name: string;
@@ -34,9 +26,9 @@ export async function update(
     publicVersionId?: string;
   }>,
 ) {
-  return await Language.update(data, { where: { uuid } });
+  return Language.update(data, { where: { uuid } });
 }
 
-export async function remove(uuid: string) {
-  return await Language.update({ status: Status.DELETED }, { where: { uuid } });
+export function remove(uuid: string) {
+  return Language.update({ status: Status.DELETED }, { where: { uuid } });
 }

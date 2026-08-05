@@ -15,6 +15,7 @@ const builders: ((
   q: LanguageQuery,
 ) => Partial<FindOptions<Language>> | undefined)[] = [
   (_q) => ({
+    attributes: ["uuid", "name", "type", "status", "createdAt", "updatedAt"],
     include: [
       {
         model: UserReference,
@@ -23,6 +24,7 @@ const builders: ((
       {
         model: Language,
         as: "publicVersion",
+        attributes: ["uuid", "name"],
       },
       {
         model: Collaborator,
