@@ -12,7 +12,7 @@ export async function getLanguageReificationTypeEndpoints(
     }
     const reificationTypeEndpoints =
       await reificationTypeEndpointService.getReificationTypeEndpoints(
-        req.params.languageId as string,
+        req.params.reificationTypeId as string,
         req.user,
       );
     return res.json(reificationTypeEndpoints);
