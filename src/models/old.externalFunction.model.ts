@@ -53,7 +53,7 @@ export const OrmExternalFunction = sequelize.define(
     url: { type: Sequelize.TEXT },
     header: { type: Sequelize.JSONB },
     resulting_action: { type: Sequelize.TEXT },
-    language_id: { type: Sequelize.INTEGER },
+    language_id: { type: Sequelize.UUID },
     visible: { type: Sequelize.INTEGER },
     call_on_properties_changed: { type: Sequelize.INTEGER },
   },
