@@ -67,3 +67,10 @@ ReificationType.hasMany(ReificationTypeEndpoint, {
   sourceKey: "uuid",
   as: "endpoints",
 });
+
+ReificationTypeEndpoint.belongsToMany(ElementType, {
+  through: "ReificationTypeEndpoints_Elements",
+  foreignKey: "endpointId",
+  otherKey: "elementTypeId",
+  as: "elementTypes",
+});

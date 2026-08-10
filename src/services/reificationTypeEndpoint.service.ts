@@ -10,7 +10,14 @@ export async function getReificationTypeEndpoints(
   reificationTypeId: string,
   user: SessionUser,
 ) {
-  const language = await languageRepository.findById(reificationTypeId);
+  const reificationType =
+    await reificationTypeRepository.findById(reificationTypeId);
+  if (!reificationType) {
+    throw new Error("Reification type not found");
+  }
+  const language = await languageRepository.findById(
+    reificationType.languageId,
+  );
   if (!language) {
     throw new Error("Language not found");
   }

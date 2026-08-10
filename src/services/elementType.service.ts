@@ -2,6 +2,8 @@ import { SessionUser } from "@variamosple/variamos-security";
 import { ensureCanRead, ensureCanUpdate } from "../auth/language.auth";
 import * as elementTypeRepository from "../repositories/elementType.repository";
 import * as languageRepository from "../repositories/language.repository";
+import { Attributes, CreationAttributes } from "sequelize";
+import ElementType from "../models/elementType.model";
 
 export async function getLanguageElementTypes(
   languageId: string,
@@ -36,14 +38,7 @@ export async function getElementType(
 }
 
 export async function createElementType(
-  data: {
-    languageId: string;
-    name: string;
-    description: string;
-    style?: Record<string, unknown>;
-    properties?: Record<string, unknown>;
-    constraint?: string;
-  },
+  data: CreationAttributes<ElementType>,
   user: SessionUser,
 ) {
   const language = await languageRepository.findById(data.languageId);
@@ -57,13 +52,7 @@ export async function createElementType(
 export async function updateElementType(
   languageId: string,
   uuid: string,
-  data: Partial<{
-    name: string;
-    description: string;
-    style: Record<string, unknown>;
-    properties: Record<string, unknown>;
-    constraint: string;
-  }>,
+  data: Partial<Attributes<ElementType>>,
   user: SessionUser,
 ) {
   const elementType = await elementTypeRepository.findById(uuid);
