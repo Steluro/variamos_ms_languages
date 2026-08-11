@@ -25,7 +25,7 @@ reificationTypeRouter.put(
   reificationTypeController.updateReificationType,
 );
 reificationTypeRouter.delete(
-  "/:languageId/relareificationtion-types/:uuid",
+  "/:languageId/reification-types/:uuid",
   isAuthenticated,
   reificationTypeController.deleteReificationType,
 );
