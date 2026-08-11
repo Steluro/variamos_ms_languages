@@ -2,6 +2,9 @@ import { SessionUser } from "@variamosple/variamos-security";
 import { ensureCanRead, ensureCanUpdate } from "../auth/language.auth";
 import * as languageRepository from "../repositories/language.repository";
 import * as relationTypeRepository from "../repositories/relationType.repository";
+import { Attributes, CreationAttributes } from "sequelize";
+import RelationType from "../models/relationType.model";
+
 
 export async function getLanguageRelationTypes(
   languageId: string,
@@ -36,14 +39,7 @@ export async function getRelationType(
 }
 
 export async function createRelationType(
-  data: {
-    languageId: string;
-    name: string;
-    description: string;
-    style?: Record<string, unknown>;
-    properties?: Record<string, unknown>;
-    constraint?: string;
-  },
+  data : CreationAttributes<RelationType>,
   user: SessionUser,
 ) {
   const language = await languageRepository.findById(data.languageId);
@@ -57,13 +53,7 @@ export async function createRelationType(
 export async function updateRelationType(
   languageId: string,
   uuid: string,
-  data: Partial<{
-    name: string;
-    description: string;
-    style: Record<string, unknown>;
-    properties: Record<string, unknown>;
-    constraint: string;
-  }>,
+  data: Partial<Attributes<RelationType>>,
   user: SessionUser,
 ) {
   const relationType = await relationTypeRepository.findById(uuid);
@@ -100,3 +90,4 @@ export async function deleteRelationType(
   ensureCanUpdate(user, language);
   return relationTypeRepository.remove(uuid);
 }
+
