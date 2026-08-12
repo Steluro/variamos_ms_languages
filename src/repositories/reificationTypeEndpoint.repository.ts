@@ -1,5 +1,6 @@
 import { Attributes, CreationAttributes } from "sequelize";
 import ReificationTypeEndpoint from "../models/reificationTypeEndpoint.model";
+import ElementType from "../models/elementType.model";
 
 export async function findAllByReificationTypeId(
   reificationTypeId: string,
@@ -8,6 +9,13 @@ export async function findAllByReificationTypeId(
     where: {
       reificationTypeId,
     },
+    include: [
+      {
+        model: ElementType,
+        as: "elementTypes",
+        attributes: ["uuid", "name", "description"],
+      }
+    ]
   });
 }
 
@@ -18,6 +26,13 @@ export async function findById(
     where: {
       uuid,
     },
+    include: [
+      {
+        model: ElementType,
+        as: "elementTypes",
+        attributes: ["uuid", "name", "description"],
+      }
+    ]
   });
 }
 
