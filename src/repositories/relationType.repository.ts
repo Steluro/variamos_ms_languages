@@ -1,3 +1,4 @@
+import { Attributes } from "sequelize";
 import RelationType from "../models/relationType.model";
 
 export async function findAllByLanguageId(languageId: string) {
@@ -22,19 +23,17 @@ export async function create(data: { languageId: string; name: string }) {
 
 export async function update(
   uuid: string,
-  data: Partial<{
-    name: string;
-    description: string;
-    style: Record<string, unknown>;
-    properties: Record<string, unknown>;
-    constraint: string;
-  }>,
+  data: Partial<Attributes<RelationType>>,
 ) {
-  return RelationType.update(data, {
+  await RelationType.update(data, {
     where: {
       uuid,
     },
   });
+  const relationType = await RelationType.findByPk(uuid);
+  if (!relationType) throw new Error("Relation type not found");
+  if (data.sources !== undefined) relationType.setSources(data.sources);
+  if (data.targets !== undefined) relationType.setTargets(data.targets);
 }
 
 export async function remove(uuid: string) {

@@ -1,4 +1,5 @@
 import {
+  BelongsToManySetAssociationsMixin,
   CreationOptional,
   DataTypes,
   InferAttributes,
@@ -8,6 +9,7 @@ import {
 import { sequelize } from "../config/database";
 import { env } from "../config/env";
 import ReificationType from "./reificationType.model";
+import ElementType from "./elementType.model";
 
 export default class ReificationTypeEndpoint extends Model<
   InferAttributes<
@@ -32,7 +34,11 @@ export default class ReificationTypeEndpoint extends Model<
   declare readonly createdAt: CreationOptional<Date>;
   declare readonly updatedAt: CreationOptional<Date>;
 
-  declare elementTypes?: Element[];
+  declare elementTypes?: ElementType[];
+  declare setElementTypes: BelongsToManySetAssociationsMixin<
+    ElementType,
+    string
+  >;
 }
 
 ReificationTypeEndpoint.init(

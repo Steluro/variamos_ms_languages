@@ -1,4 +1,5 @@
 import {
+  BelongsToManySetAssociationsMixin,
   CreationOptional,
   DataTypes,
   InferAttributes,
@@ -8,6 +9,7 @@ import {
 import { sequelize } from "../config/database";
 import { env } from "../config/env";
 import Language from "./language.model";
+import ElementType from "./elementType.model";
 
 export default class RelationType extends Model<
   InferAttributes<
@@ -34,8 +36,10 @@ export default class RelationType extends Model<
   declare readonly createdAt: CreationOptional<Date>;
   declare readonly updatedAt: CreationOptional<Date>;
 
-  declare sources?: Element[];
-  declare targets?: Element[];
+  declare sources?: ElementType[];
+  declare setSources: BelongsToManySetAssociationsMixin<ElementType, string>;
+  declare targets?: ElementType[];
+  declare setTargets: BelongsToManySetAssociationsMixin<ElementType, string>;
 }
 
 RelationType.init(

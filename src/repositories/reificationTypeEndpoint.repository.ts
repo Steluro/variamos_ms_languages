@@ -14,8 +14,8 @@ export async function findAllByReificationTypeId(
         model: ElementType,
         as: "elementTypes",
         attributes: ["uuid", "name", "description"],
-      }
-    ]
+      },
+    ],
   });
 }
 
@@ -31,8 +31,8 @@ export async function findById(
         model: ElementType,
         as: "elementTypes",
         attributes: ["uuid", "name", "description"],
-      }
-    ]
+      },
+    ],
   });
 }
 
@@ -46,11 +46,15 @@ export async function update(
   uuid: string,
   data: Partial<Attributes<ReificationTypeEndpoint>>,
 ): Promise<void> {
-  ReificationTypeEndpoint.update(data, {
+  await ReificationTypeEndpoint.update(data, {
     where: {
       uuid,
     },
   });
+  const endpoint = await ReificationTypeEndpoint.findByPk(uuid);
+  if (!endpoint) throw new Error("Endpoint not found");
+  if (data.elementTypes !== undefined)
+    endpoint.setElementTypes(data.elementTypes);
 }
 
 export async function remove(uuid: string): Promise<void> {
