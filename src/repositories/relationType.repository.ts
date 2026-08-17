@@ -1,11 +1,23 @@
 import { Attributes } from "sequelize";
 import RelationType from "../models/relationType.model";
-
+import ElementType from "../models/elementType.model";
 export async function findAllByLanguageId(languageId: string) {
   return RelationType.findAll({
     where: {
       languageId,
     },
+    include: [
+      {
+        model: ElementType,
+        as: "sources",
+        attributes: ["uuid", "name", "description"],
+      },
+      {
+        model: ElementType,
+        as: "targets",
+        attributes: ["uuid", "name", "description"],
+      },
+    ],
   });
 }
 
@@ -14,6 +26,18 @@ export async function findById(uuid: string) {
     where: {
       uuid,
     },
+    include: [
+      {
+        model: ElementType,
+        as: "sources",
+        attributes: ["uuid", "name", "description"],
+      },
+      {
+        model: ElementType,
+        as: "targets",
+        attributes: ["uuid", "name", "description"],
+      },
+    ]
   });
 }
 
@@ -32,8 +56,8 @@ export async function update(
   });
   const relationType = await RelationType.findByPk(uuid);
   if (!relationType) throw new Error("Relation type not found");
-  if (data.sources !== undefined) relationType.setSources(data.sources);
-  if (data.targets !== undefined) relationType.setTargets(data.targets);
+  if (data.sources !== undefined) await relationType.setSources(data.sources);
+  if (data.targets !== undefined) await relationType.setTargets(data.targets);
 }
 
 export async function remove(uuid: string) {
