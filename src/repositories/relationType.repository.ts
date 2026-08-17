@@ -31,13 +31,15 @@ export async function findById(uuid: string) {
         model: ElementType,
         as: "sources",
         attributes: ["uuid", "name", "description"],
+        through: { attributes: [] }, // drop RelationTypes_Sources field
       },
       {
         model: ElementType,
         as: "targets",
         attributes: ["uuid", "name", "description"],
+        through: { attributes: [] }, // drop RelationTypes_Targets field
       },
-    ]
+    ],
   });
 }
 

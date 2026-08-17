@@ -31,6 +31,7 @@ export async function findById(
         model: ElementType,
         as: "elementTypes",
         attributes: ["uuid", "name", "description"],
+        through: { attributes: [] }, // drop ReificationTypeEndpoints_Elements field
       },
     ],
   });
