@@ -88,3 +88,34 @@ export function ensureCanManageCollaborators(
 
   ensurePermission(user, "languages::manage-collaborators::all");
 }
+
+export function ensureCanPublish(user: SessionUser, language: Language) {
+  if (language.status === Status.PENDING)
+    {
+      ensurePermission(user, "languages::publish::pending");
+      return;
+    }
+  ensurePermission(user, "languages::publish::all");
+  }
+
+export function ensureCanSubmit(user: SessionUser, language: Language) {
+  if (
+    language.status === Status.DRAFT
+    && language.ownerId === user.id)
+    {
+      ensurePermission(user, "languages::submit::own");
+      return;
+    }
+  ensurePermission(user, "languages::submit::all");
+  }
+
+  export function ensureCanWithdraw(user: SessionUser, language: Language) {
+    if (
+      language.status === Status.PENDING
+      && language.ownerId === user.id)
+      {
+        ensurePermission(user, "languages::withdraw::own");
+        return;
+      }
+    ensurePermission(user, "languages::withdraw::all");
+    }
