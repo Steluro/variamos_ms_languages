@@ -19,26 +19,39 @@ const ajv = new Ajv();
 export default class ExternalFunctionManagement {
   getExternalFuntions = async (req: Request, res: Response) => {
     try {
-      const searchExternalFunctions = (await OrmExternalFunction.findAll({
-        where: { language_id: req.params.languageId },
-      })) as ExternalFunction;
+      const languageId = Array.isArray(req.params.languageId)
+        ? req.params.languageId[0]
+        : req.params.languageId;
 
-      if (searchExternalFunctions) {
-        const responseApi = new ResponseAPISuccess();
-        responseApi.message = "External functions were found successfully";
-        responseApi.data = JSON.parse(JSON.stringify(searchExternalFunctions));
-        responseApi.transactionId = "getExternalFuntions_";
-        return res.status(200).json(responseApi);
-      }
+      const searchExternalFunctions =
+        (await OrmExternalFunction.findAll({
+          where: { language_id: languageId },
+        })) as ExternalFunction[];
+
+      const responseApi = new ResponseAPISuccess();
+
+      responseApi.message =
+        "External functions were found successfully";
+
+      responseApi.data = JSON.parse(
+        JSON.stringify(searchExternalFunctions),
+      );
+
+      responseApi.transactionId = "getExternalFuntions_";
+
+      return res.status(200).json(responseApi);
     } catch (e) {
       const responseApi = new ResponseAPIError();
+
       responseApi.message = "Internal Server Error";
       responseApi.errorCode = "08";
       responseApi.data = JSON.parse(
         JSON.stringify('{"messageError": "' + e + '"}'),
       );
       responseApi.transactionId = "getExternalFuntions_";
+
       console.log(JSON.stringify(responseApi));
+
       return res.status(500).json(responseApi);
     }
   };
@@ -66,7 +79,10 @@ export default class ExternalFunctionManagement {
             JSON.stringify(validate.errors),
         );
 
-      extFunction.language_id = parseInt(Array.isArray(req.params.languageId) ? req.params.languageId[0] : req.params.languageId);
+  
+        extFunction.language_id = Array.isArray(req.params.languageId,)
+          ? req.params.languageId[0]
+          : req.params.languageId;
 
       let newExFunction = await OrmExternalFunction.create(extFunction, {
         fields: [
@@ -115,7 +131,9 @@ export default class ExternalFunctionManagement {
 
       let extFunction: ExternalFunction = new ExternalFunction();
       extFunction = Object.assign(extFunction, req.body.data);
-      extFunction.id = parseInt(Array.isArray(req.params.exid) ? req.params.exid[0] : req.params.exid);
+      extFunction.id = Array.isArray(req.params.exid)
+        ? req.params.exid[0]
+        : req.params.exid;
 
       validate = ajv.compile(ExternalFunctionSchema);
       valid = validate(req.body.data);
@@ -166,7 +184,6 @@ export default class ExternalFunctionManagement {
 
   deleteExternalFunction = async (req: Request, res: Response) => {
     try {
-      // const id = parseInt(req.params.exid);
 
       const deleteExternalFunction = await OrmExternalFunction.destroy({
         where: { id: req.params.exid },
