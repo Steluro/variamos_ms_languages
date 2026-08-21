@@ -11,7 +11,7 @@ export class ExternalFunction {
   url?: string;
   header?: object;
   resulting_action?: string;
-  language_id?: number;
+  language_id?: string;
   visible?: number;
   call_on_properties_changed?: number;
   [key: string | symbol]: any;
@@ -23,7 +23,7 @@ export class ExternalFunction {
     url?: string,
     header?: object,
     resulting_action?: string,
-    language_id?: number,
+    language_id?: string,
     visible?: number,
     call_on_properties_changed?: number,
   ) {
@@ -73,7 +73,7 @@ export const ExternalFunctionSchema = {
     url: { type: "string" },
     header: { type: "object" },
     resulting_action: { type: "string" },
-    language_id: { type: "number" },
+    language_id: { type: "string" },
     visible: { type: "number" },
     call_on_properties_changed: { type: "number" },
   },

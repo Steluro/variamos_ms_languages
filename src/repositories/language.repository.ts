@@ -1,3 +1,4 @@
+import { Attributes } from "sequelize";
 import Language, { Status, Types } from "../models/language.model";
 import { buildQuery, LanguageQuery } from "./language.query";
 
@@ -20,11 +21,7 @@ export function create(data: {
 
 export function update(
   uuid: string,
-  data: Partial<{
-    name: string;
-    type: Types;
-    publicVersionId?: string;
-  }>,
+  data:Partial<Attributes<Language> & Omit<{ uuid: string }, "uuid">>,
 ) {
   return Language.update(data, { where: { uuid } });
 }
