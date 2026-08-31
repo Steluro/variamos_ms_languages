@@ -68,19 +68,7 @@ ReificationTypeEndpoint.init(
     style: {
       type: DataTypes.JSONB,
       allowNull: false,
-      defaultValue: {
-        stroke: {
-          type: "solid",
-          color: "#000000",
-          width: 2,
-        },
-        elementArrow: {
-          type: "none",
-        },
-        relationArrow: {
-          type: "none",
-        },
-      },
+      defaultValue: sequelize.literal('DEFAULT'),
     },
   },
   {

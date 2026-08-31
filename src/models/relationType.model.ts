@@ -69,19 +69,7 @@ RelationType.init(
     style: {
       type: DataTypes.JSONB,
       allowNull: false,
-      defaultValue: {
-        stroke: {
-          type: "solid",
-          color: "#000000",
-          width: 2,
-        },
-        sourceArrow: {
-          type: "none",
-        },
-        targetArrow: {
-          type: "none",
-        },
-      },
+      defaultValue: sequelize.literal('DEFAULT'),
     },
     properties: {
       type: DataTypes.JSONB,

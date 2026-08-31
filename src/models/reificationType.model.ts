@@ -65,22 +65,7 @@ ReificationType.init(
     style: {
       type: DataTypes.JSONB,
       allowNull: false,
-      defaultValue: {
-        shape: "circle",
-        fill: {
-          type: "solid",
-          value: "#ffffff",
-        },
-        stroke: {
-          type: "solid",
-          value: "#000000",
-          width: 1,
-        },
-        font: {
-          size: 12,
-          color: "#000000",
-        },
-      },
+      defaultValue: sequelize.literal('DEFAULT'),
     },
     properties: {
       type: DataTypes.JSONB,
