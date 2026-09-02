@@ -4,13 +4,13 @@ import { CollaboratorRole } from "../models/collaborator.model";
 import Language, { Status } from "../models/language.model";
 
 export function ensureCanRead(user: SessionUser, language: Language) {
-  if (language.status === Status.PUBLISHED && language.ownerId !== user.id) {
+  if (language.status === Status.PUBLISHED && language.owner?.id !== user.id) {
     ensurePermission(user, "languages::get::public");
     return;
   }
 
   if (
-    language.ownerId === user.id ||
+    language.owner?.id === user.id ||
     language.collaborators?.some(
       (c) =>
         c.userId === user.id &&
@@ -33,14 +33,14 @@ export function ensureCanCreate(user: SessionUser) {
 }
 
 export function ensureCanUpdate(user: SessionUser, language: Language) {
-  if (language.ownerId === user.id && language.status === Status.DRAFT) {
+  if (language.owner?.id === user.id && language.status === Status.DRAFT) {
     ensurePermission(user, "languages::update::own");
     return;
   }
 
   if (
     language.status === Status.DRAFT &&
-    (language.ownerId === user.id ||
+    (language.owner?.id === user.id ||
       language.collaborators?.some(
         (c) =>
           c.userId === user.id &&
@@ -57,7 +57,7 @@ export function ensureCanUpdate(user: SessionUser, language: Language) {
 export function ensureCanDelete(user: SessionUser, language: Language) {
   if (
     language.status === Status.DRAFT &&
-    (language.ownerId === user.id ||
+    (language.owner?.id === user.id ||
       language.collaborators?.some(
         (c) =>
           c.userId === user.id && [CollaboratorRole.EDITOR].includes(c.role),
@@ -76,7 +76,7 @@ export function ensureCanManageCollaborators(
 ) {
   if (
     language.status === Status.DRAFT &&
-    (language.ownerId === user.id ||
+    (language.owner?.id === user.id ||
       language.collaborators?.some(
         (c) =>
           c.userId === user.id && [CollaboratorRole.EDITOR].includes(c.role),
@@ -101,7 +101,7 @@ export function ensureCanPublish(user: SessionUser, language: Language) {
 export function ensureCanSubmit(user: SessionUser, language: Language) {
   if (
     language.status === Status.DRAFT
-    && language.ownerId === user.id)
+    && language.owner?.id === user.id)
     {
       ensurePermission(user, "languages::submit::own");
       return;
@@ -112,7 +112,7 @@ export function ensureCanSubmit(user: SessionUser, language: Language) {
   export function ensureCanWithdraw(user: SessionUser, language: Language) {
     if (
       language.status === Status.PENDING
-      && language.ownerId === user.id)
+      && language.owner?.id === user.id)
       {
         ensurePermission(user, "languages::withdraw::own");
         return;
