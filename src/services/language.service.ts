@@ -59,23 +59,28 @@ export async function updateLanguage(
   if (!language) {
     throw new Error("Language not found");
   }
-  ensureCanUpdate(user, language);
+  
   if(data.status){
-    switch(language.status,data.status){
-      case (Status.DRAFT,Status.PENDING):
-        ensureCanSubmit(user, language);
-        break;
-      case (Status.PENDING,Status.PUBLISHED):
-        ensureCanPublish(user, language);
-        break;
-      case (Status.PENDING,Status.DRAFT):
-        ensureCanWithdraw(user, language);
-        break;
-      default:
-        throw new Error("Invalid status transition");      
+    if (language.status === Status.DRAFT && data.status === Status.PENDING) {
+      console.log("CanSubMit",language.status,data.status);
+      ensureCanSubmit(user, language);
+    } else if (language.status === Status.PENDING && data.status === Status.PUBLISHED) {
+      console.log("CanPublish",language.status,data.status);
+      ensureCanPublish(user, language);
+    } else if (language.status === Status.PENDING && data.status === Status.DRAFT) {
+      console.log("CanWithDraw",language.status,data.status);
+      ensureCanWithdraw(user, language);
+    } else {
+      console.log("Invalid status transition",language.status,data.status);
+      throw new Error("Invalid status transition");
     }
+    return languageRepository.update(uuid, { status : data.status });
   }
-  return languageRepository.update(uuid, data);
+  else
+    {
+      ensureCanUpdate(user, language);
+      return languageRepository.update(uuid, data);
+    }
 }
 
 export async function deleteLanguage(uuid: string, user: SessionUser) {

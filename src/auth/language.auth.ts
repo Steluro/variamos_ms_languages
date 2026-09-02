@@ -33,11 +33,6 @@ export function ensureCanCreate(user: SessionUser) {
 }
 
 export function ensureCanUpdate(user: SessionUser, language: Language) {
-  if (language.owner?.id === user.id && language.status === Status.DRAFT) {
-    ensurePermission(user, "languages::update::own");
-    return;
-  }
-
   if (
     language.status === Status.DRAFT &&
     (language.owner?.id === user.id ||
@@ -49,8 +44,8 @@ export function ensureCanUpdate(user: SessionUser, language: Language) {
   ) {
     ensurePermission(user, "languages::update::own");
     return;
-  }
-
+  };
+  
   ensurePermission(user, "languages::update::all");
 }
 
