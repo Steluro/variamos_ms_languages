@@ -33,7 +33,8 @@ export default class Collaborator extends Model<
   declare languageId: string;
   declare userId: string;
   declare role: CreationOptional<CollaboratorRole>;
-
+  
+  declare user?: UserReference;
   declare readonly createdAt: CreationOptional<Date>;
   declare readonly updatedAt: CreationOptional<Date>;
 }

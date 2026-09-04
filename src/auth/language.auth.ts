@@ -13,7 +13,7 @@ export function ensureCanRead(user: SessionUser, language: Language) {
     language.owner?.id === user.id ||
     language.collaborators?.some(
       (c) =>
-        c.userId === user.id &&
+        c.user?.id === user.id &&
         [
           CollaboratorRole.VIEWER,
           CollaboratorRole.EDITOR,
@@ -38,7 +38,7 @@ export function ensureCanUpdate(user: SessionUser, language: Language) {
     (language.owner?.id === user.id ||
       language.collaborators?.some(
         (c) =>
-          c.userId === user.id &&
+          c.user?.id === user.id &&
           [CollaboratorRole.EDITOR, CollaboratorRole.MANAGER].includes(c.role),
       ))
   ) {
@@ -55,7 +55,7 @@ export function ensureCanDelete(user: SessionUser, language: Language) {
     (language.owner?.id === user.id ||
       language.collaborators?.some(
         (c) =>
-          c.userId === user.id && [CollaboratorRole.EDITOR].includes(c.role),
+          c.user?.id === user.id && [CollaboratorRole.EDITOR].includes(c.role),
       ))
   ) {
     ensurePermission(user, "languages::delete::own");
@@ -74,7 +74,7 @@ export function ensureCanManageCollaborators(
     (language.owner?.id === user.id ||
       language.collaborators?.some(
         (c) =>
-          c.userId === user.id && [CollaboratorRole.EDITOR].includes(c.role),
+          c.user?.id=== user.id && [CollaboratorRole.EDITOR].includes(c.role),
       ))
   ) {
     ensurePermission(user, "languages::manage-collaborators::own");
